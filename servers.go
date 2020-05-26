@@ -10,10 +10,10 @@ import (
 
 // Power States
 const (
-	ON = "start"
-	OFF = "stop"
+	ON      = "start"
+	OFF     = "stop"
 	RESTART = "restart"
-	KILL = "kill"
+	KILL    = "kill"
 )
 
 // Servers
@@ -32,7 +32,7 @@ type ClientServer struct {
 // ApplicationServer defines Pterodactyl server as an administrator would see it. It is fetched and interacted with
 // the api token.
 type ApplicationServer struct {
-	ID           int
+	ID                 int
 	Name               string
 	Description        string
 	Limits             Limits
@@ -43,7 +43,7 @@ type ApplicationServer struct {
 	Node               int
 	Nest               int
 	Egg                int
-	Allocation        int
+	Allocation         int
 	AllocationsDetails []Allocation
 	Container          Container
 	Updated            time.Time
@@ -53,27 +53,27 @@ type ApplicationServer struct {
 // jsonServer is the API definition for the server, and contains all the data in it's original form.
 // It's used as the target struct in the marshalling/unmarshalling of API requests or responses.
 type jsonServer struct {
-	ID            int               `json:"id"`
-	ExternalID    string            `json:"external_id"`
-	UUID          string            `json:"uuid"`
-	Identifier    string            `json:"identifier"`
-	Name          string            `json:"name"`
-	Description   string            `json:"description"`
-	Suspended     bool              `json:"suspended"`
-	ServerOwner   bool              `json:"server_owner"`
-	Limits        Limits           `json:"limits"`
+	ID            int    `json:"id"`
+	ExternalID    string `json:"external_id"`
+	UUID          string `json:"uuid"`
+	Identifier    string `json:"identifier"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
+	Suspended     bool   `json:"suspended"`
+	ServerOwner   bool   `json:"server_owner"`
+	Limits        Limits `json:"limits"`
 	FeatureLimits struct {
 		Databases   int `json:"databases"`
 		Allocations int `json:"allocations"`
 	} `json:"feature_limits"`
-	User          int        `json:"user"`
-	Node          int        `json:"node"`
-	Allocation    int        `json:"allocation"`
-	Nest          int        `json:"nest"`
-	Egg           int        `json:"egg"`
+	User          int       `json:"user"`
+	Node          int       `json:"node"`
+	Allocation    int       `json:"allocation"`
+	Nest          int       `json:"nest"`
+	Egg           int       `json:"egg"`
 	Container     Container `json:"container"`
-	UpdatedAt     time.Time  `json:"updated_at"`
-	CreatedAt     time.Time  `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+	CreatedAt     time.Time `json:"created_at"`
 	Relationships struct {
 		Allocations struct {
 			Data []struct {
@@ -103,8 +103,8 @@ type jsonServerCreation struct {
 		Default    int   `json:"default,omitempty"`
 		Additional []int `json:"additional,omitempty"`
 	} `json:"allocation"`
-	Nest      int       `json:"nest"`
-	Egg       int       `json:"egg"`
+	Nest int `json:"nest"`
+	Egg  int `json:"egg"`
 }
 
 // jsonServerPage contains a page of jsonServers and the pagination data.
@@ -147,6 +147,7 @@ type Container struct {
 	Environment    map[string]string `json:"environment"`
 }
 
+// Allocation holds all the information relating to the allocation data of a server
 type Allocation struct {
 	Primary bool   `json:"primary"`
 	IP      string `json:"ip"`
@@ -178,7 +179,7 @@ type CPU struct {
 	Limit   uint64
 }
 
-// Memory holds the usage and limits of the server disk
+// Disk holds the usage and limits of the server disk
 type Disk struct {
 	Current uint64
 	Limit   uint64
@@ -194,7 +195,7 @@ type Players struct {
 //***** Converters *****//
 
 // asClientServer parses a jsonServer into a *ClientServer
-func (s *jsonServer) asClientServer() *ClientServer{
+func (s *jsonServer) asClientServer() *ClientServer {
 	cs := &ClientServer{
 		ID:          s.Identifier,
 		Name:        s.Name,
@@ -204,7 +205,7 @@ func (s *jsonServer) asClientServer() *ClientServer{
 	}
 	cs.Limits.Databases = s.FeatureLimits.Databases
 
-	for _, alloc := range s.Relationships.Allocations.Data{
+	for _, alloc := range s.Relationships.Allocations.Data {
 		cs.AllocationDetails = append(cs.AllocationDetails, *alloc.Allocation)
 	}
 
@@ -212,8 +213,8 @@ func (s *jsonServer) asClientServer() *ClientServer{
 }
 
 // asClientServers parses a jsonServerPage into an slice of *ClientServers
-func (sp *jsonServerPage) asClientServers() (servers []*ClientServer){
-	for _, d := range sp.Data{
+func (sp *jsonServerPage) asClientServers() (servers []*ClientServer) {
+	for _, d := range sp.Data {
 		servers = append(servers, d.Server.asClientServer())
 	}
 
@@ -242,7 +243,7 @@ func (s *jsonServer) asApplicationServer() *ApplicationServer {
 
 	as.Limits.Databases = s.FeatureLimits.Databases
 
-	for _, alloc := range s.Relationships.Allocations.Data{
+	for _, alloc := range s.Relationships.Allocations.Data {
 		as.AllocationsDetails = append(as.AllocationsDetails, *alloc.Allocation)
 	}
 
@@ -250,8 +251,8 @@ func (s *jsonServer) asApplicationServer() *ApplicationServer {
 }
 
 // asApplicationServers parses a jsonServerPage into an slice of *ApplicationServer
-func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer, ){
-	for _, d := range sp.Data{
+func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer, ) {
+	for _, d := range sp.Data {
 		servers = append(servers, d.Server.asApplicationServer())
 	}
 
@@ -259,7 +260,7 @@ func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer, 
 }
 
 // asJsonServerCreation parses a ApplicationServer into a JSON-ready *jsonServerCreation
-func (s *ApplicationServer) asJsonServerCreation() *jsonServerCreation{
+func (s *ApplicationServer) asJsonServerCreation() *jsonServerCreation {
 	js := &jsonServerCreation{
 		ExternalID:  s.ExternalID,
 		Name:        s.Name,
@@ -284,7 +285,7 @@ func (s *ApplicationServer) asJsonServerCreation() *jsonServerCreation{
 	js.Allocation.Default = s.Allocation
 
 	for _, alloc := range s.AllocationsDetails {
-		if s.Allocation == alloc.Port{
+		if s.Allocation == alloc.Port {
 			continue
 		}
 		js.Allocation.Additional = append(js.Allocation.Additional, alloc.Port)
@@ -307,7 +308,7 @@ func (s *ApplicationServer) String() string {
 // getAll fetches all the existing pages for a server list. The original page is kept as index 0
 func (sp *jsonServerPage) getAll(token string) (pages []*jsonServerPage, err error) {
 	pages = append(pages, sp)
-	for pages[len(pages)-1].Meta.Pagination.Links.Next != ""{
+	for pages[len(pages)-1].Meta.Pagination.Links.Next != "" {
 		url := sp.Meta.Pagination.Links.Next + "&include=allocations"
 		bytes, err := queryCallback(url, token, "GET", nil)
 		if err != nil {
@@ -335,7 +336,7 @@ func (c *ApplicationCredentials) GetServer(internalId int) (sv *ApplicationServe
 		return
 	}
 
-	var wrapper struct{
+	var wrapper struct {
 		Server jsonServer `json:"attributes"`
 	}
 
@@ -347,14 +348,14 @@ func (c *ApplicationCredentials) GetServer(internalId int) (sv *ApplicationServe
 	return wrapper.Server.asApplicationServer(), nil
 }
 
-// GetServer fetches the server with the given External ID if it exists
+// GetServerExternal fetches the server with the given External ID if it exists
 func (c *ApplicationCredentials) GetServerExternal(externalId string) (sv *ApplicationServer, err error) {
 	bytes, err := c.query("servers/external/"+externalId+"?include=allocations", "GET", nil)
 	if err != nil {
 		return
 	}
 
-	var wrapper struct{
+	var wrapper struct {
 		Server jsonServer `json:"attributes"`
 	}
 
@@ -386,7 +387,7 @@ func (c *ApplicationCredentials) GetServers() (svs []*ApplicationServer, err err
 		return
 	}
 
-	for _, page := range pages{
+	for _, page := range pages {
 		svs = append(svs, page.asApplicationServers()...)
 	}
 

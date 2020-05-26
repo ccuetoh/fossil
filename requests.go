@@ -16,7 +16,7 @@ func (c *ApplicationCredentials) query(endpoint, method string, data []byte) ([]
 	return queryCallback(target, c.Token, method, data)
 }
 
-func (c * ClientCredentials) query(endpoint, method string, data []byte) ([]byte, error) {
+func (c *ClientCredentials) query(endpoint, method string, data []byte) ([]byte, error) {
 	target := fmt.Sprintf("%s/api/client/%s", c.URL, endpoint)
 	return queryCallback(target, c.Token, method, data)
 }
@@ -25,7 +25,7 @@ func queryCallback(url, token, method string, data []byte) ([]byte, error) {
 	client := &http.Client{}
 	rq, _ := http.NewRequest(method, url, bytes.NewBuffer(data))
 
-	rq.Header.Set("Authorization", "Bearer " + token)
+	rq.Header.Set("Authorization", "Bearer "+token)
 	rq.Header.Set("Accept", "Application/vnd.pterodactyl.v1+json")
 	rq.Header.Set("Content-Type", "application/json")
 
@@ -41,15 +41,15 @@ func queryCallback(url, token, method string, data []byte) ([]byte, error) {
 		body, _ = ioutil.ReadAll(rp.Body)
 
 		// No additional error info given
-		if body == nil{
+		if body == nil {
 			return nil, errors.New("remote server responded with status " + rp.Status)
 		}
 
 		rqErr, err := parseError(body)
 		// Info was there but unable to be decoded
-		if err != nil{
-			msg := fmt.Sprintf("remote server responded with status %s." +
-				" aditionaly another error ocurred while decoding the error: %s", rp.Status, err.Error())
+		if err != nil {
+			msg := fmt.Sprintf("remote server responded with status %s."+
+				" aditionaly another error occurred while decoding the error: %s", rp.Status, err.Error())
 			return nil, errors.New(msg)
 		}
 
@@ -65,7 +65,7 @@ func queryCallback(url, token, method string, data []byte) ([]byte, error) {
 
 	rp.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 
-	err =  rp.Body.Close()
+	err = rp.Body.Close()
 	if err != nil {
 		return body, errors.New("unable to close response body")
 	}
@@ -95,7 +95,7 @@ func parseError(bytes []byte) (*requestError, error) {
 		return nil, err
 	}
 
-	if len(rqErrors.Errors) < 1{
+	if len(rqErrors.Errors) < 1 {
 		return nil, errors.New("no error details given")
 	}
 

@@ -27,8 +27,8 @@ func (c *ApplicationCredentials) GetDatabases(sid int) (dbs []*Database, err err
 		return
 	}
 
-	var wrapper struct{
-		Data []struct{
+	var wrapper struct {
+		Data []struct {
 			Database *Database `json:"attributes"`
 		}
 	}
@@ -52,7 +52,7 @@ func (c *ApplicationCredentials) GetDatabase(sid int, dbid int) (db *Database, e
 		return
 	}
 
-	var wrapper struct{
+	var wrapper struct {
 		Database *Database `json:"attributes"`
 	}
 

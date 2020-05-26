@@ -3,6 +3,9 @@
 <p></p>
 
 # Fossil
+[![Go Report Card](https://goreportcard.com/badge/github.com/CamiloHernandez/fossil)](https://goreportcard.com/report/github.com/CamiloHernandez/fossil)
+[![Licence](https://img.shields.io/github/license/CamiloHernandez/fossil)](https://github.com/CamiloHernandez/fossil/blob/master/LICENSE)
+
 Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants. It allows client-wise and administrator-wise operations for easy and automated server, user, node, egg and location management.
 
 ## Installation
@@ -302,6 +305,6 @@ if err != nil {
 ```
 
 ## Disclaimer
-Fossil is partially based on the [Crocgodyl](www.github.com/parkervcp/crocgodyl). All the respective kudos to the author. 
+Fossil is partially based on the [Crocgodyl](https://www.github.com/parkervcp/crocgodyl). All the respective kudos to the author. 
 
 This library is licensed under the MIT Licence, please refer to the LICENCE file for more information.

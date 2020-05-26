@@ -13,7 +13,7 @@ func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
 		return
 	}
 
-	var wrapper struct{
+	var wrapper struct {
 		Server jsonServer `json:"attributes"`
 	}
 
@@ -45,7 +45,7 @@ func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
 		return
 	}
 
-	for _, page := range pages{
+	for _, page := range pages {
 		svs = append(svs, page.asClientServers()...)
 	}
 
@@ -59,7 +59,7 @@ func (c *ClientCredentials) GetStatus(id string) (ss *ServerStatus, err error) {
 		return
 	}
 
-	var wrapper struct{
+	var wrapper struct {
 		Utilization *ServerStatus `json:"attributes"`
 	}
 

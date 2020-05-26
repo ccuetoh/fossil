@@ -5,8 +5,8 @@ package fossil
 // Credentials is the base object for ClientCredentials and ApplicationCredentials, and should not be used
 // independently.
 type Credentials struct {
-	URL         string
-	Token 		string
+	URL   string
+	Token string
 }
 
 // ClientCredentials are user-specific, and can only be used to access and modify servers associated
@@ -20,7 +20,7 @@ type ApplicationCredentials Credentials
 // NewClient creates a new ClientCredentials object used to interact with Pterodactyl as a user.
 func NewClient(url, clientToken string) *ClientCredentials {
 	return &ClientCredentials{
-		URL: url,
+		URL:   url,
 		Token: clientToken,
 	}
 }
@@ -28,7 +28,7 @@ func NewClient(url, clientToken string) *ClientCredentials {
 // NewApplication Creates a new ApplicationCredentials object used to interact with Pterodactyl as administrator.
 func NewApplication(url, apiToken string) *ApplicationCredentials {
 	return &ApplicationCredentials{
-		URL: url,
+		URL:   url,
 		Token: apiToken,
 	}
 }
