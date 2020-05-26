@@ -9,16 +9,19 @@ import (
 	"net/http"
 )
 
+// Using the function through a variable allows stub testing
+var query = queryCallback
+
 //***** Queries *****//
 
 func (c *ApplicationCredentials) query(endpoint, method string, data []byte) ([]byte, error) {
 	target := fmt.Sprintf("%s/api/application/%s", c.URL, endpoint)
-	return queryCallback(target, c.Token, method, data)
+	return query(target, c.Token, method, data)
 }
 
 func (c *ClientCredentials) query(endpoint, method string, data []byte) ([]byte, error) {
 	target := fmt.Sprintf("%s/api/client/%s", c.URL, endpoint)
-	return queryCallback(target, c.Token, method, data)
+	return query(target, c.Token, method, data)
 }
 
 func queryCallback(url, token, method string, data []byte) ([]byte, error) {

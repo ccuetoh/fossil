@@ -52,8 +52,8 @@ func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
 	return
 }
 
-// GetStatus fetches the server's status and usage
-func (c *ClientCredentials) GetStatus(id string) (ss *ServerStatus, err error) {
+// GetServerStatus fetches the server's status and usage
+func (c *ClientCredentials) GetServerStatus(id string) (ss *ServerStatus, err error) {
 	bytes, err := c.query("servers/"+id+"/utilization", "GET", nil)
 	if err != nil {
 		return

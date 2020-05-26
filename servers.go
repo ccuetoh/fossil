@@ -24,7 +24,6 @@ type ClientServer struct {
 	Name              string
 	Description       string
 	Limits            Limits
-	Allocation        int
 	AllocationDetails []Allocation
 	IsOwner           bool
 }
@@ -43,6 +42,7 @@ type ApplicationServer struct {
 	Node               int
 	Nest               int
 	Egg                int
+	Pack               int
 	Allocation         int
 	AllocationsDetails []Allocation
 	Container          Container
@@ -71,6 +71,7 @@ type jsonServer struct {
 	Allocation    int       `json:"allocation"`
 	Nest          int       `json:"nest"`
 	Egg           int       `json:"egg"`
+	Pack          int       `json:"pack"`
 	Container     Container `json:"container"`
 	UpdatedAt     time.Time `json:"updated_at"`
 	CreatedAt     time.Time `json:"created_at"`
@@ -181,8 +182,8 @@ type CPU struct {
 
 // Disk holds the usage and limits of the server disk
 type Disk struct {
-	Current uint64
-	Limit   uint64
+	Used  uint64
+	Limit uint64
 }
 
 // Players holds the number of users in a server and the max amount permitted. Some Pterodactyl API-based
@@ -235,6 +236,7 @@ func (s *jsonServer) asApplicationServer() *ApplicationServer {
 		Node:        s.Node,
 		Nest:        s.Nest,
 		Egg:         s.Egg,
+		Pack:        s.Pack,
 		Container:   s.Container,
 		Updated:     s.UpdatedAt,
 		Created:     s.CreatedAt,
@@ -251,7 +253,7 @@ func (s *jsonServer) asApplicationServer() *ApplicationServer {
 }
 
 // asApplicationServers parses a jsonServerPage into an slice of *ApplicationServer
-func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer, ) {
+func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer) {
 	for _, d := range sp.Data {
 		servers = append(servers, d.Server.asApplicationServer())
 	}
@@ -442,6 +444,7 @@ func (c *ApplicationCredentials) UpdateDetails(sv *ApplicationServer) (err error
 func (c *ApplicationCredentials) UpdateBuild(sv *ApplicationServer, addAlloc []int, removeAlloc []int) (err error) {
 	type build struct {
 		Allocation        int     `json:"allocation,omitempty"`
+		OOM               bool    `json:"oom_disabled"`
 		Limits            *Limits `json:"limits,omitempty"`
 		AddAllocations    []int   `json:"add_allocations,omitempty"`
 		RemoveAllocations []int   `json:"remove_allocations,omitempty"`
@@ -452,6 +455,7 @@ func (c *ApplicationCredentials) UpdateBuild(sv *ApplicationServer, addAlloc []i
 	}
 
 	b := build{
+		OOM:               true,
 		Allocation:        sv.Allocation,
 		Limits:            &sv.Limits,
 		AddAllocations:    addAlloc,
@@ -499,6 +503,7 @@ func (c *ApplicationCredentials) UpdateStartup(sv *ApplicationServer) (err error
 		Environment: env,
 		Egg:         sv.Egg,
 		Image:       sv.Container.Image,
+		Pack:        sv.Pack,
 	}
 
 	bytes, err := json.Marshal(su)
@@ -543,6 +548,6 @@ func (c *ApplicationCredentials) DeleteServer(sid int) (err error) {
 // ForceDeleteServer forcefully deletes a server. This is an ungraceful way to delete the server, and when
 // possible DeleteServer should be preferred.
 func (c *ApplicationCredentials) ForceDeleteServer(sid int) (err error) {
-	_, err = c.query(fmt.Sprintf("servers/%d", sid), "DELETE", nil)
+	_, err = c.query(fmt.Sprintf("servers/%d/force", sid), "DELETE", nil)
 	return
 }

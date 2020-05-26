@@ -5,6 +5,8 @@
 # Fossil
 [![Go Report Card](https://goreportcard.com/badge/github.com/CamiloHernandez/fossil)](https://goreportcard.com/report/github.com/CamiloHernandez/fossil)
 [![Licence](https://img.shields.io/github/license/CamiloHernandez/fossil)](https://github.com/CamiloHernandez/fossil/blob/master/LICENSE)
+![Coverage](https://img.shields.io/badge/Go%20Coverage-72%25-brightgreen.svg?longCache=true&style=flat)
+[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg)](http://godoc.org/github.com/camilohernandez/fossil)
 
 Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants. It allows client-wise and administrator-wise operations for easy and automated server, user, node, egg and location management.
 
@@ -52,6 +54,22 @@ fmt.Printf("Name: %s\n", server.Name)
 fmt.Printf("Description: %s\n", server.Description)
 fmt.Printf("IP: %s\n", server.Allocation.IP)
 ```
+
+##### Get a server's status and usage
+```go
+status, err := client.GetServerStatus("6a185444")
+if err != nil {
+    fmt.Println("ERROR: " + err.Error())
+    return
+}
+
+fmt.Printf("State: %s\n", status.State)
+fmt.Printf("CPU Current: %f\n", server.CPU.Current)
+fmt.Printf("Memory used: %d\n", server.Memory.Used)
+fmt.Printf("Disk used: %s\n", server.Disk.Used)
+```
+
+
 #### Server Actions
 ##### Turn server on
 ```go
@@ -305,6 +323,6 @@ if err != nil {
 ```
 
 ## Disclaimer
-Fossil is partially based on the [Crocgodyl](https://www.github.com/parkervcp/crocgodyl). All the respective kudos to the author. 
+Fossil is partially based on the [Crocgodyl](https://www.github.com/parkervcp/crocgodyl) library. All the respective kudos to the author. 
 
-This library is licensed under the MIT Licence, please refer to the LICENCE file for more information.
+This library is licensed under the MIT Licence, please refer to the LICENCE file for more information. The logo used in this project is provided by OpenClipart-Vectors, and is licenced under the [Pixbay Licence](https://pixabay.com/service/license/).
