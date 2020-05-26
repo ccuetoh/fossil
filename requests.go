@@ -49,7 +49,7 @@ func queryCallback(url, token, method string, data []byte) ([]byte, error) {
 		// Info was there but unable to be decoded
 		if err != nil{
 			msg := fmt.Sprintf("remote server responded with status %s." +
-				" aditionaly an error ocurred while decoding error details: %s", rp.Status, err.Error())
+				" aditionaly another error ocurred while decoding the error: %s", rp.Status, err.Error())
 			return nil, errors.New(msg)
 		}
 
