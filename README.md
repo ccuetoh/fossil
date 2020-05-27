@@ -11,13 +11,45 @@
 
 Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants. It allows client-wise and administrator-wise operations for easy and automated server, user, node, egg and location management.
 
+## Contents:
+- [Installation](#installation)
+- [Examples](#examples)
+    - [Client API](#client-api)
+        - [Servers](#client-servers)
+            - [Fetch](#client-servers-fetch)
+            - [Status and usage](#client-servers-status)
+        - [Server Actions](#client-serveractions)
+            - [Turn on/off](#client-serveractions-onoff)
+            - [Execute commands](#client-serveractions-command)
+    - [Application API](#app-api)
+        - [Servers](#app-servers)
+            - [Fetch](#app-servers-fetch)
+            - [Create](#app-servers-create)
+            - [Modify](#app-servers-modify)
+            - [Suspend/Unsuspend](#app-servers-suspend)
+            - [Reinstall or rebuild](#app-servers-re)
+        - [Databases](#app-db)
+            - [Fetch](#app-db-fetch)
+            - [Create](#app-db-create)
+            - [Delete](#app-db-delete)
+        - [Users](#app-users)
+            - [Fetch](#app-users-fetch)
+            - [Modify](#app-users-modify)
+            - [Create](#app-users-create)
+            - [Delete](#app-users-delete)
+- [Disclaimer](#disclaimer)
+- [Licence](#licence)
+
+<a name="installation"></a>
 ## Installation
 Fossil can be installed using the integrated Go package manager:
 
 ``go get github.com/camilohernandez/fossil``
 
+<a name="examples"></a>
 ## Examples
-### Client
+<a name="client-api"></a>
+### Client API
 A Client gets access to all the functionalities a user might find on their server control panel. A Client Token is requiered for the Creation of a Client. To start a new Client use the ```NewClient()``` function:
 
 ```go
@@ -25,7 +57,9 @@ import "github.com/camilohernandez/fossil"
 
 client := fossil.NewClient("https://example.com","NRVW42TME45WW3B3E5VTWOZ3MFZWIYLTMRQXGZDBMFZWIYLT") // Panel URL and Client Token
 ```
+<a name="client-servers"></a>
 #### Servers
+<a name="client-servers-fetch"></a>
 ##### Fetch all servers
 ```go
 servers, err := client.GetServers()
@@ -54,6 +88,7 @@ fmt.Printf("Name: %s\n", server.Name)
 fmt.Printf("Description: %s\n", server.Description)
 ```
 
+<a name="client-servers-status"></a>
 ##### Get a server's status and usage
 ```go
 status, err := client.GetServerStatus("6a185444")
@@ -68,8 +103,9 @@ fmt.Printf("Memory used: %d\n", server.Memory.Used)
 fmt.Printf("Disk used: %s\n", server.Disk.Used)
 ```
 
-
+<a name="client-serveractions"></a>
 #### Server Actions
+<a name="client-serveractions-onoff"></a>
 ##### Turn server on
 ```go
 err := client.SetPowerState("6a185444", fossil.ON)
@@ -78,7 +114,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="client-serveractions-command"></a>
 ##### Execute a command on a server
 ```go
 err := client.ExecuteCommand("6a185444", "say Hello!")
@@ -88,7 +124,8 @@ if err != nil {
 }
 ```
 
-### Application
+<a name="app-api"></a>
+### Application API
 An Application connection allows full access to server, user, location, nest and egg management. With Application calls you have full administrator-level access to the creation of users and servers. An Application Token (also called "API Token") is required to create an Application object. To start a new Application use the ```NewApplication()``` function:
 ```go
 import "github.com/camilohernandez/fossil"
@@ -96,9 +133,10 @@ import "github.com/camilohernandez/fossil"
 app := fossil.NewApplication("https://example.com","OF3WK4LXMVYXOZLYMRQXQWTYMFZWIYLTMRQXGZDBOM") // Panel URl and Application Token
 
 ```
-
+<a name="app-servers"></a>
 #### Servers
 When interacting servers with an Application Token you get extra information, and more functions.
+<a name="app-servers-fetch"></a>
 ##### Fetch all servers
 ```go
 servers, err := app.GetServers()
@@ -133,7 +171,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-servers-create"></a>
 ##### Create a new server
 ```go
 server := &fossil.ApplicationServer{
@@ -168,7 +206,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-servers-modify"></a>
 ##### Change a server's name, user, external ID or description
 ```go
 sv, err := app.GetServer(17)
@@ -228,7 +266,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-servers-suspend"></a>
 ##### Suspend or unsuspend a server
 ```go
 err := app.SuspendServer(17) // Suspending server with Internal ID 17 
@@ -243,7 +281,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-servers-re"></a>
 ##### Rebuild or reinstall a server
 ```go
 err := app.RebuildServer(17) // Rebuilding server with Internal ID 17
@@ -258,7 +296,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-servers-delete"></a>
 ##### Delete a server
 ```go
 err := app.DeleteServer(17) // Deleting server with Internal ID 17
@@ -273,8 +311,9 @@ if err != nil {                 // is an unsafe operation.
     return
 }
 ```
-
+<a name="app-db"></a>
 #### Databases
+<a name="app-db-fetch"></a>
 ##### Fetch all databases
 ```go
 dbs, err := app.GetDatabases()
@@ -296,7 +335,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-db-create"></a>
 ##### Create a database
 ```go
 db := &fossil.Database{
@@ -311,7 +350,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-db-delete"></a>
 ##### Delete a database
 ```go
 err := app.DeleteDatabase(17, 1) // Delete database 1 in server 17
@@ -320,8 +359,9 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-users"></a>
 ### Users
+<a name="app-users-fetch"></a>
 ##### Fetch all users
 ```go
 users, err := app.GetUsers()
@@ -345,7 +385,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-users-create"></a>
 ##### Create a user
 ```go
 user := &fossil.User{
@@ -362,7 +402,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-users-modify"></a>
 ##### Update a user
 ```go
 user, err := app.GetUser(17)
@@ -378,7 +418,7 @@ if err != nil {
     return
 }
 ```
-
+<a name="app-users-delete"></a>
 ##### Delete a user
 ```go
 err := app.DeleteUser(17)
@@ -386,8 +426,9 @@ err := app.DeleteUser(17)
 		return
 	}
 ```
-
+<a name="disclaimer"></a>
 ## Disclaimer
 Fossil is partially based on the [Crocgodyl](https://www.github.com/parkervcp/crocgodyl) library. All the respective kudos to the author. 
-
+<a name="licence"></a>
+## Licence
 This library is licensed under the MIT Licence, please refer to the LICENCE file for more information. The logo used in this project is provided by OpenClipart-Vectors, and is licenced under the [Pixbay Licence](https://pixabay.com/service/license/).
