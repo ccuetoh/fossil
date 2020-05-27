@@ -9,7 +9,7 @@ import (
 func TestApplicationCredentials_GetUsers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/users"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -189,7 +189,7 @@ func TestApplicationCredentials_GetUsers(t *testing.T) {
 func TestApplicationCredentials_GetUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/users/1"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -247,7 +247,7 @@ func TestApplicationCredentials_GetUser(t *testing.T) {
 func TestApplicationCredentials_GetUserExternal(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/users/external/1"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -305,13 +305,13 @@ func TestApplicationCredentials_GetUserExternal(t *testing.T) {
 func TestApplicationCredentials_CreateUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/users"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
-		expectBody := `{"external_id":"example_ext_id","username":"example",`+
-						`"email":"example@example.com","first_name":"John",`+
-						`"last_name":"Doe","password":"cat","root_admin":false,"language":"en"}`
+		expectBody := `{"external_id":"example_ext_id","username":"example",` +
+			`"email":"example@example.com","first_name":"John",` +
+			`"last_name":"Doe","password":"cat","root_admin":false,"language":"en"}`
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))
 		}
@@ -340,11 +340,11 @@ func TestApplicationCredentials_CreateUser(t *testing.T) {
 func TestApplicationCredentials_UpdateUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/users/1"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
-		expectBody := `{"external_id":"codeco","username":"codeco","email":"codeco@file.properties",`+
+		expectBody := `{"external_id":"codeco","username":"codeco","email":"codeco@file.properties",` +
 			`"first_name":"Updated","last_name":"User","password":"betterPassword","root_admin":true,"language":"en"}`
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))

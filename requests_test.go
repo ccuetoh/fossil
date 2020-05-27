@@ -13,7 +13,7 @@ func TestQueryURL(t *testing.T) {
 
 	expect := `{"success":"true"}`
 
-	if strings.TrimSpace(string(res)) != expect{
+	if strings.TrimSpace(string(res)) != expect {
 		t.Errorf("Response data unexpected: %s", res)
 	}
 }

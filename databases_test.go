@@ -87,7 +87,7 @@ func TestApplicationCredentials_GetDatabases(t *testing.T) {
 func TestApplicationCredentials_GetDatabase(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/servers/1/databases/1"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -149,11 +149,11 @@ func TestApplicationCredentials_CreateDatabase(t *testing.T) {
 	}
 
 	a := NewApplication("https://example.com", "")
-	
+
 	db := &Database{
-		Host:      2,
-		Database:  "mydb",
-		Remote:    "%",
+		Host:     2,
+		Database: "mydb",
+		Remote:   "%",
 	}
 
 	err := a.CreateDatabase(1, db)
@@ -197,4 +197,3 @@ func TestApplicationCredentials_DeleteDatabase(t *testing.T) {
 		t.Errorf("Error: %s", err.Error())
 	}
 }
-

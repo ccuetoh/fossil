@@ -11,7 +11,7 @@ import (
 func TestApplicationCredentials_GetServers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/servers?include=allocations"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -217,7 +217,7 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 func TestApplicationCredentials_GetServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectUrl := "https://example.com/api/application/servers/2?include=allocations"
-		if expectUrl != url{
+		if expectUrl != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -486,11 +486,11 @@ func TestApplicationCredentials_UpdateBuild(t *testing.T) {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
-		expectBody := `{"allocation":9,"oom_disabled":true,`+
-						`"limits":{"memory":2048,"swap":-1,`+
-						`"disk":10000,"io":500,"cpu":300},`+
-						`"add_allocations":[15],"remove_allocations":[3],`+
-						`"feature_limits":{"databases":10,"allocations":10}}`
+		expectBody := `{"allocation":9,"oom_disabled":true,` +
+			`"limits":{"memory":2048,"swap":-1,` +
+			`"disk":10000,"io":500,"cpu":300},` +
+			`"add_allocations":[15],"remove_allocations":[3],` +
+			`"feature_limits":{"databases":10,"allocations":10}}`
 
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))
@@ -502,7 +502,7 @@ func TestApplicationCredentials_UpdateBuild(t *testing.T) {
 	a := NewApplication("https://example.com", "")
 
 	sv := &ApplicationServer{
-		ID:          1,
+		ID:         1,
 		Allocation: 9,
 		Limits: Limits{
 			Memory:      2048,
@@ -530,9 +530,9 @@ func TestApplicationCredentials_UpdateStartup(t *testing.T) {
 
 		// Modified a bit from the original API example. The Map object in the request originally had 2 items
 		// but would fail the test if they swapped order.
-		expectBody := `{"startup":"java -Xms128M -Xmx1024M -jar paper.jar",`+
-						`"environment":["SERVER_JARFILE"],"egg":1,`+
-						`"pack":4,"image":"quay.io/pterodactyl/core:java","skip_scripts":false}`
+		expectBody := `{"startup":"java -Xms128M -Xmx1024M -jar paper.jar",` +
+			`"environment":["SERVER_JARFILE"],"egg":1,` +
+			`"pack":4,"image":"quay.io/pterodactyl/core:java","skip_scripts":false}`
 
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))
@@ -548,9 +548,9 @@ func TestApplicationCredentials_UpdateStartup(t *testing.T) {
 		Container: Container{
 			StartupCommand: "java -Xms128M -Xmx1024M -jar paper.jar",
 			Image:          "quay.io/pterodactyl/core:java",
-			Environment: map[string]string{"SERVER_JARFILE": ""},
+			Environment:    map[string]string{"SERVER_JARFILE": ""},
 		},
-		Egg: 1,
+		Egg:  1,
 		Pack: 4,
 	}
 

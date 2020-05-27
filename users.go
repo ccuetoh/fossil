@@ -145,7 +145,6 @@ func (c *ApplicationCredentials) GetUserExternal(eid string) (user *User, err er
 	return wrapper.User, nil
 }
 
-
 // CreateUser makes a new account with the provided data. The password argument can be optionally set.
 func (c *ApplicationCredentials) CreateUser(u *User, password ...string) (err error) {
 	type wrapper struct {
@@ -160,7 +159,7 @@ func (c *ApplicationCredentials) CreateUser(u *User, password ...string) (err er
 	}
 
 	var pw string
-	if len(password) > 0{
+	if len(password) > 0 {
 		pw = password[0]
 	}
 
@@ -170,7 +169,7 @@ func (c *ApplicationCredentials) CreateUser(u *User, password ...string) (err er
 		Email:      u.Email,
 		FirstName:  u.FirstName,
 		LastName:   u.LastName,
-		Password:   pw, 			// If empty the parser will take care of it
+		Password:   pw, // If empty the parser will take care of it
 		RootAdmin:  u.RootAdmin,
 		Language:   u.Language,
 	}
@@ -200,7 +199,7 @@ func (c *ApplicationCredentials) UpdateUser(u *User, password ...string) (err er
 	}
 
 	var pw string
-	if len(password) > 0{
+	if len(password) > 0 {
 		pw = password[0]
 	}
 
@@ -210,7 +209,7 @@ func (c *ApplicationCredentials) UpdateUser(u *User, password ...string) (err er
 		Email:      u.Email,
 		FirstName:  u.FirstName,
 		LastName:   u.LastName,
-		Password:   pw, 			// If empty the parser will take care of it
+		Password:   pw, // If empty the parser will take care of it
 		RootAdmin:  u.RootAdmin,
 		Language:   u.Language,
 	}
