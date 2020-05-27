@@ -363,7 +363,7 @@ if err != nil {
 }
 ```
 
-##### Update user
+##### Update a user
 ```go
 user, err := app.GetUser(17)
 if err != nil {
@@ -377,6 +377,14 @@ if err != nil {
     fmt.Println("ERROR: " + err.Error())
     return
 }
+```
+
+##### Delete a user
+```go
+err := app.DeleteUser(17)
+	if err != nil {
+		return
+	}
 ```
 
 ## Disclaimer

@@ -155,7 +155,7 @@ func (c *ApplicationCredentials) CreateUser(u *User, password ...string) (err er
 		FirstName  string `json:"first_name"`
 		LastName   string `json:"last_name"`
 		Password   string `json:"password,omitempty"`
-		RootAdmin  bool   `json:"root_admin,omitempty"`
+		RootAdmin  bool   `json:"root_admin"`
 		Language   string `json:"language,omitempty"`
 	}
 
