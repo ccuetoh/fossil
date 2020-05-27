@@ -10,7 +10,7 @@ import (
 )
 
 // Using the function through a variable allows stub testing
-var query = queryCallback
+var query = queryURL
 
 //***** Queries *****//
 
@@ -24,7 +24,7 @@ func (c *ClientCredentials) query(endpoint, method string, data []byte) ([]byte,
 	return query(target, c.Token, method, data)
 }
 
-func queryCallback(url, token, method string, data []byte) ([]byte, error) {
+func queryURL(url, token, method string, data []byte) ([]byte, error) {
 	client := &http.Client{}
 	rq, _ := http.NewRequest(method, url, bytes.NewBuffer(data))
 

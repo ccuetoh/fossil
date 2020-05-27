@@ -38,7 +38,6 @@ for _, s := range servers {
     fmt.Printf("ID: %s\n", s.ID)
     fmt.Printf("Name: %s\n", s.Name)
     fmt.Printf("Description: %s\n", s.Description)
-    fmt.Printf("IP: %s\n\n", s.Allocation.IP)
 }
 ```
 
@@ -53,7 +52,6 @@ if err != nil {
 fmt.Printf("ID: %s\n", server.ID)
 fmt.Printf("Name: %s\n", server.Name)
 fmt.Printf("Description: %s\n", server.Description)
-fmt.Printf("IP: %s\n", server.Allocation.IP)
 ```
 
 ##### Get a server's status and usage
@@ -231,7 +229,7 @@ if err != nil {
 }
 ```
 
-##### Suspend and unsuspend a server
+##### Suspend or unsuspend a server
 ```go
 err := app.SuspendServer(17) // Suspending server with Internal ID 17 
 if err != nil {
@@ -279,7 +277,7 @@ if err != nil {                 // is an unsafe operation.
 #### Databases
 ##### Fetch all databases
 ```go
-dbs, err := app.GetDatabases(17)
+dbs, err := app.GetDatabases()
 if err != nil {
     fmt.Println(err.Error())
     return
@@ -319,6 +317,64 @@ if err != nil {
 err := app.DeleteDatabase(17, 1) // Delete database 1 in server 17
 if err != nil {
     fmt.Println(err.Error())
+    return
+}
+```
+
+### Users
+##### Fetch all users
+```go
+users, err := app.GetUsers()
+if err != nil {
+    fmt.Println("ERROR: " + err.Error())
+    return
+}
+
+for _, u := range users {
+    fmt.Printf("ID: %d\n", u.ID)
+    fmt.Printf("First Name: %s\n", u.FirstName)
+    fmt.Printf("Last Name: %s\n\n", u.LastName)
+}
+```
+
+##### Fetch a specific user
+```go
+user, err := app.GetUser(4) // Get user of Internal ID 4
+if err != nil {
+    fmt.Println("ERROR: " + err.Error())
+    return
+}
+```
+
+##### Create a user
+```go
+user := &fossil.User{
+    ExternalID:              "test_user1",
+    Username:                "TestUser",
+    Email:                   "example@example.com",
+    FirstName:               "John",
+    LastName:                "Doe",
+}
+
+err := app.CreateUser(user, "password123")
+if err != nil {
+    fmt.Println("ERROR: " + err.Error())
+    return
+}
+```
+
+##### Update user
+```go
+user, err := app.GetUser(17)
+if err != nil {
+    return
+}
+
+user.FirstName = "John"
+
+err = app.UpdateUser(user, "password123") // Password is optional
+if err != nil {
+    fmt.Println("ERROR: " + err.Error())
     return
 }
 ```

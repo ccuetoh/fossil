@@ -32,14 +32,14 @@ func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
 		return
 	}
 
-	// We get the initial page
+	// Get the initial page
 	var page jsonServerPage
 	err = json.Unmarshal(bytes, &page)
 	if err != nil {
 		return
 	}
 
-	// We'll search for the remaining pages if present
+	// Search for the remaining pages if present
 	pages, err := page.getAll(c.Token)
 	if err != nil {
 		return

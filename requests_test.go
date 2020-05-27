@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestQueryCallback(t *testing.T) {
-	res, err := queryCallback("https://reqbin.com/echo/get/json", "", "GET", nil)
+func TestQueryURL(t *testing.T) {
+	res, err := queryURL("https://reqbin.com/echo/get/json", "", "GET", nil)
 	if err != nil {
 		t.Errorf("Error: %s", err.Error())
 	}
