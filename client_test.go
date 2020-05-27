@@ -229,13 +229,13 @@ func TestClientCredentials_GetStatus(t *testing.T) {
 func TestClientCredentials_ExecuteCommand(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectBody := `{"command":"test"}`
-		expectUrl := "https://example.com/api/client/servers/test_id/command"
+		expectURL := "https://example.com/api/client/servers/test_id/command"
 
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))
 		}
 
-		if expectUrl != url {
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -253,13 +253,13 @@ func TestClientCredentials_ExecuteCommand(t *testing.T) {
 func TestClientCredentials_SetPowerState(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		expectBody := `{"signal":"start"}`
-		expectUrl := "https://example.com/api/client/servers/test_id/power"
+		expectURL := "https://example.com/api/client/servers/test_id/power"
 
 		if expectBody != string(data) {
 			t.Errorf("Request data does not match expected: %s", string(data))
 		}
 
-		if expectUrl != url {
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", string(data))
 		}
 

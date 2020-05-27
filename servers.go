@@ -332,8 +332,8 @@ func (sp *jsonServerPage) getAll(token string) (pages []*jsonServerPage, err err
 //***** Requests *****//
 
 // GetServer fetches the server with the given Internal ID if it exists
-func (c *ApplicationCredentials) GetServer(internalId int) (sv *ApplicationServer, err error) {
-	bytes, err := c.query(fmt.Sprintf("servers/%d?include=allocations", internalId), "GET", nil)
+func (c *ApplicationCredentials) GetServer(internalID int) (sv *ApplicationServer, err error) {
+	bytes, err := c.query(fmt.Sprintf("servers/%d?include=allocations", internalID), "GET", nil)
 	if err != nil {
 		return
 	}

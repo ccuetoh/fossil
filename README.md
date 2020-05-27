@@ -7,7 +7,7 @@
 [![Build Status](https://travis-ci.org/CamiloHernandez/fossil.svg?branch=master)](https://travis-ci.org/CamiloHernandez/fossil)
 ![Coverage](https://img.shields.io/badge/Go%20Coverage-72%25-brightgreen.svg?longCache=true&style=flat)
 [![Licence](https://img.shields.io/github/license/CamiloHernandez/fossil)](https://github.com/CamiloHernandez/fossil/blob/master/LICENSE)
-[![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg)](http://godoc.org/github.com/camilohernandez/fossil)
+[![GoDoc](https://godoc.org/github.com/CamiloHernandez/fossil?status.svg)](https://godoc.org/github.com/CamiloHernandez/fossil)
 
 Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants. It allows client-wise and administrator-wise operations for easy and automated server, user, node, egg and location management.
 

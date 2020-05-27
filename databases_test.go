@@ -86,8 +86,8 @@ func TestApplicationCredentials_GetDatabases(t *testing.T) {
 
 func TestApplicationCredentials_GetDatabase(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/databases/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/databases/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -135,8 +135,8 @@ func TestApplicationCredentials_GetDatabase(t *testing.T) {
 }
 func TestApplicationCredentials_CreateDatabase(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/databases"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/databases"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -164,8 +164,8 @@ func TestApplicationCredentials_CreateDatabase(t *testing.T) {
 
 func TestApplicationCredentials_ResetDatabasePassword(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/databases/1/reset-password"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/databases/1/reset-password"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -182,8 +182,8 @@ func TestApplicationCredentials_ResetDatabasePassword(t *testing.T) {
 
 func TestApplicationCredentials_DeleteDatabase(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/databases/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/databases/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 

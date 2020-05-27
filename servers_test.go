@@ -10,8 +10,8 @@ import (
 
 func TestApplicationCredentials_GetServers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers?include=allocations"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers?include=allocations"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -216,8 +216,8 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 
 func TestApplicationCredentials_GetServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/2?include=allocations"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/2?include=allocations"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -323,8 +323,8 @@ func TestApplicationCredentials_GetServer(t *testing.T) {
 
 func TestApplicationCredentials_GetServerExternal(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/external/cow_eater?include=allocations"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/external/cow_eater?include=allocations"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -430,8 +430,8 @@ func TestApplicationCredentials_GetServerExternal(t *testing.T) {
 
 func TestApplicationCredentials_CreateServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -448,8 +448,8 @@ func TestApplicationCredentials_CreateServer(t *testing.T) {
 
 func TestApplicationCredentials_UpdateDetails(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/details"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/details"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -481,8 +481,8 @@ func TestApplicationCredentials_UpdateDetails(t *testing.T) {
 
 func TestApplicationCredentials_UpdateBuild(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/build"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/build"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -523,8 +523,8 @@ func TestApplicationCredentials_UpdateBuild(t *testing.T) {
 
 func TestApplicationCredentials_UpdateStartup(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/startup"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/startup"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -562,8 +562,8 @@ func TestApplicationCredentials_UpdateStartup(t *testing.T) {
 
 func TestApplicationCredentials_SuspendServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/suspend"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/suspend"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -580,8 +580,8 @@ func TestApplicationCredentials_SuspendServer(t *testing.T) {
 
 func TestApplicationCredentials_UnsuspendServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/unsuspend"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/unsuspend"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -598,8 +598,8 @@ func TestApplicationCredentials_UnsuspendServer(t *testing.T) {
 
 func TestApplicationCredentials_ReinstallServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/reinstall"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/reinstall"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -616,8 +616,8 @@ func TestApplicationCredentials_ReinstallServer(t *testing.T) {
 
 func TestApplicationCredentials_RebuildServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/rebuild"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/rebuild"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -634,8 +634,8 @@ func TestApplicationCredentials_RebuildServer(t *testing.T) {
 
 func TestApplicationCredentials_DeleteServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -652,8 +652,8 @@ func TestApplicationCredentials_DeleteServer(t *testing.T) {
 
 func TestApplicationCredentials_ForceDeleteServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/servers/1/force"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/servers/1/force"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 

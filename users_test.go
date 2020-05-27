@@ -8,8 +8,8 @@ import (
 
 func TestApplicationCredentials_GetUsers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -188,8 +188,8 @@ func TestApplicationCredentials_GetUsers(t *testing.T) {
 
 func TestApplicationCredentials_GetUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -246,8 +246,8 @@ func TestApplicationCredentials_GetUser(t *testing.T) {
 
 func TestApplicationCredentials_GetUserExternal(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users/external/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users/external/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -304,8 +304,8 @@ func TestApplicationCredentials_GetUserExternal(t *testing.T) {
 
 func TestApplicationCredentials_CreateUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -339,8 +339,8 @@ func TestApplicationCredentials_CreateUser(t *testing.T) {
 
 func TestApplicationCredentials_UpdateUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 
@@ -374,8 +374,8 @@ func TestApplicationCredentials_UpdateUser(t *testing.T) {
 
 func TestApplicationCredentials_DeleteUser(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		expectUrl := "https://example.com/api/application/users/1"
-		if expectUrl != url {
+		expectURL := "https://example.com/api/application/users/1"
+		if expectURL != url {
 			t.Errorf("Request url does not match expected: %s", url)
 		}
 

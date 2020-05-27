@@ -1,3 +1,4 @@
+// Package fossil provides a wrapper for the Pterodactyl and WISP APIs.
 package fossil
 
 //***** Credentials *****//
