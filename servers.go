@@ -114,19 +114,7 @@ type jsonServerPage struct {
 	Data []struct {
 		Server *jsonServer `json:"attributes"`
 	} `json:"data"`
-	Meta struct {
-		Pagination struct {
-			Total       int `json:"total"`
-			Count       int `json:"count"`
-			PerPage     int `json:"per_page"`
-			CurrentPage int `json:"current_page"`
-			TotalPages  int `json:"total_pages"`
-			Links       struct {
-				Previous string `json:"previous,omitempty"`
-				Next     string `json:"next,omitempty"`
-			} `json:"links"`
-		} `json:"pagination"`
-	} `json:"meta"`
+	Meta Meta `json:"meta"`
 }
 
 // Limits contains all the allocated usage limits set for a server
@@ -261,8 +249,8 @@ func (sp *jsonServerPage) asApplicationServers() (servers []*ApplicationServer) 
 	return servers
 }
 
-// asJsonServerCreation parses a ApplicationServer into a JSON-ready *jsonServerCreation
-func (s *ApplicationServer) asJsonServerCreation() *jsonServerCreation {
+// asJSONServerCreation parses a ApplicationServer into a JSON-ready *jsonServerCreation
+func (s *ApplicationServer) asJSONServerCreation() *jsonServerCreation {
 	js := &jsonServerCreation{
 		ExternalID:  s.ExternalID,
 		Name:        s.Name,
@@ -351,8 +339,8 @@ func (c *ApplicationCredentials) GetServer(internalID int) (sv *ApplicationServe
 }
 
 // GetServerExternal fetches the server with the given External ID if it exists
-func (c *ApplicationCredentials) GetServerExternal(externalId string) (sv *ApplicationServer, err error) {
-	bytes, err := c.query("servers/external/"+externalId+"?include=allocations", "GET", nil)
+func (c *ApplicationCredentials) GetServerExternal(externalID string) (sv *ApplicationServer, err error) {
+	bytes, err := c.query("servers/external/"+externalID+"?include=allocations", "GET", nil)
 	if err != nil {
 		return
 	}
@@ -398,7 +386,7 @@ func (c *ApplicationCredentials) GetServers() (svs []*ApplicationServer, err err
 
 // CreateServer creates a new server
 func (c *ApplicationCredentials) CreateServer(sv *ApplicationServer) (err error) {
-	bytes, err := json.Marshal(sv.asJsonServerCreation())
+	bytes, err := json.Marshal(sv.asJSONServerCreation())
 	if err != nil {
 		return err
 	}

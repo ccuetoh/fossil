@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+//***** Structures *****//
+
 // Database contains all the information of a specific Pterodactyl database
 type Database struct {
 	ID        int       `json:"id"`

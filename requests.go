@@ -9,6 +9,23 @@ import (
 	"net/http"
 )
 
+//***** Structures *****//
+
+// Meta contains the metadata of an API response
+type Meta struct {
+	Pagination struct {
+		Total       int `json:"total"`
+		Count       int `json:"count"`
+		PerPage     int `json:"per_page"`
+		CurrentPage int `json:"current_page"`
+		TotalPages  int `json:"total_pages"`
+		Links       struct {
+			Previous string `json:"previous,omitempty"`
+			Next     string `json:"next,omitempty"`
+		} `json:"links"`
+	} `json:"pagination"`
+}
+
 // Using the function through a variable allows stub testing
 var query = queryURL
 

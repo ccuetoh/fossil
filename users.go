@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+//***** Structures *****//
+
 // User holds user information
 type User struct {
 	ID                      int       `json:"id"`
@@ -28,19 +30,7 @@ type jsonUserPage struct {
 	Data []struct {
 		User *User `json:"attributes"`
 	} `json:"data"`
-	Meta struct {
-		Pagination struct {
-			Total       int `json:"total"`
-			Count       int `json:"count"`
-			PerPage     int `json:"per_page"`
-			CurrentPage int `json:"current_page"`
-			TotalPages  int `json:"total_pages"`
-			Links       struct {
-				Previous string `json:"previous,omitempty"`
-				Next     string `json:"next,omitempty"`
-			} `json:"links"`
-		} `json:"pagination"`
-	} `json:"meta"`
+	Meta Meta `json:"meta"`
 }
 
 //***** Pagination *****//

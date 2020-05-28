@@ -37,6 +37,9 @@ Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants
             - [Modify](#app-users-modify)
             - [Create](#app-users-create)
             - [Delete](#app-users-delete)
+        - [Nests and eggs](#app-nests)
+            - [Fetch nests](#app-nests-fetch)
+            - [Fetch eggs](#app-nests-fetch-eggs)
 - [Disclaimer](#disclaimer)
 - [Licence](#licence)
 
@@ -422,10 +425,61 @@ if err != nil {
 ##### Delete a user
 ```go
 err := app.DeleteUser(17)
-	if err != nil {
-		return
-	}
+if err != nil {
+    return
+}
 ```
+
+<a name="app-nests"></a>
+### Nests and eggs
+<a name="app-nests-fetch"></a>
+##### Fetch nests
+```go
+nests, err := app.GetNests()
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+
+for _, n := range nests{
+    fmt.Println(n.Name)
+    fmt.Println(n.Description)
+}
+```
+
+##### Fetch specific nest
+```go
+nest, err := app.GetNest(2) // Get nest with ID 2 (Minecraft)
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
+<a name="app-nests-fetch-eggs"></a>
+##### Fetch eggs inside a nest
+```go
+eggs, err := app.GetEggs(2) // Get all the eggs for nest 2 (Minecraft)
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+
+for _, e := range eggs{
+    fmt.Println(e.ID)
+    fmt.Println(e.Description)
+}
+```
+
+##### Fetch specific egg inside a nest
+```go
+egg, err := app.GetEgg(2, 2)
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
 <a name="disclaimer"></a>
 ## Disclaimer
 Fossil is partially based on the [Crocgodyl](https://www.github.com/parkervcp/crocgodyl) library. All the respective kudos to the author. 
