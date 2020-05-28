@@ -31,30 +31,40 @@ type jsonNestPage struct {
 
 // Egg represents the information regarding an egg
 type Egg struct {
-	ID          int    `json:"id"`
-	UUID        string `json:"uuid"`
-	Nest        int    `json:"nest"`
-	Author      string `json:"author"`
-	Description string `json:"description"`
-	DockerImage string `json:"docker_image"`
-	Config      struct {
-		Startup struct {
-			Done            string   `json:"done"`
-			UserInteraction []string `json:"userInteraction"`
-		} `json:"startup"`
-		Stop string `json:"stop"`
-		Extends string `json:"extends"`
-	} `json:"config"`
-	Startup string `json:"startup"`
-	Script  struct {
-		Privileged bool   `json:"privileged"`
-		Install    string `json:"install"`
-		Entry      string `json:"entry"`
-		Container  string `json:"container"`
-		Extends    string `json:"extends"`
-	} `json:"script"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          int       `json:"id"`
+	UUID        string    `json:"uuid"`
+	Nest        int       `json:"nest"`
+	Author      string    `json:"author"`
+	Description string    `json:"description"`
+	DockerImage string    `json:"docker_image"`
+	Config      EggConfig `json:"config"`
+	Startup     string    `json:"startup"`
+	Script      EggScript `json:"script"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+// EggStartup represents the startup settings of an egg
+type EggStartup struct {
+	Done            string   `json:"done"`
+	UserInteraction []string `json:"userInteraction"`
+}
+
+// EggConfig represents the configurations of an egg
+type EggConfig struct {
+	Startup      EggStartup `json:"startup"`
+	Stop         string     `json:"stop"`
+	CustomConfig []string   `json:"custom_config"`
+	Extends      string     `json:"extends"`
+}
+
+// EggScript represents the script configuration of an egg
+type EggScript struct {
+	Privileged bool   `json:"privileged"`
+	Install    string `json:"install"`
+	Entry      string `json:"entry"`
+	Container  string `json:"container"`
+	Extends    string `json:"extends"`
 }
 
 //***** Converters *****//
