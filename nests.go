@@ -23,8 +23,8 @@ type Nest struct {
 type jsonNestPage struct {
 	Object string `json:"object"`
 	Data   []struct {
-		Object     string `json:"object"`
-		Nest *Nest `json:"attributes"`
+		Object string `json:"object"`
+		Nest   *Nest  `json:"attributes"`
 	} `json:"data"`
 	Meta Meta `json:"meta"`
 }
@@ -158,7 +158,7 @@ func (c *ApplicationCredentials) GetEggs(nestID int) (eggs []*Egg, err error) {
 	}
 
 	var wrapper struct {
-		Data []struct{
+		Data []struct {
 			Egg *Egg `json:"attributes"`
 		} `json:"data"`
 	}

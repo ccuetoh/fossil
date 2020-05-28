@@ -317,8 +317,8 @@ func TestApplicationCredentials_GetEggs(t *testing.T) {
 			Author:      "support@pterodactyl.io",
 			Description: "Spigot is the most widely-used modded Minecraft server software in the world. It powers many of the top Minecraft server networks around to ensure they can cope with their huge player base and ensure the satisfaction of their players. Spigot works by reducing and eliminating many causes of lag, as well as adding in handy features and settings that help make your job of server administration easier.",
 			DockerImage: "quay.io/pterodactyl/core:java-glibc",
-			Config:      EggConfig{
-				Startup:      EggStartup{
+			Config: EggConfig{
+				Startup: EggStartup{
 					Done:            ")! For help, type ",
 					UserInteraction: []string{"Go to eula.txt for more info."},
 				},
@@ -326,16 +326,16 @@ func TestApplicationCredentials_GetEggs(t *testing.T) {
 				CustomConfig: nil,
 				Extends:      "",
 			},
-			Startup:     "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
-			Script:      EggScript{
+			Startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
+			Script: EggScript{
 				Privileged: true,
 				Install:    "TEST_INSTALL",
 				Entry:      "ash",
 				Container:  "alpine:3.7",
 				Extends:    "",
 			},
-			CreatedAt:   c1,
-			UpdatedAt:   u1,
+			CreatedAt: c1,
+			UpdatedAt: u1,
 		},
 		{
 			ID:          2,
@@ -344,8 +344,8 @@ func TestApplicationCredentials_GetEggs(t *testing.T) {
 			Author:      "support@pterodactyl.io",
 			Description: "Minecraft Forge Server. Minecraft Forge is a modding API (Application Programming Interface), which makes it easier to create mods, and also make sure mods are compatible with each other.",
 			DockerImage: "quay.io/pterodactyl/core:java",
-			Config:      EggConfig{
-				Startup:      EggStartup{
+			Config: EggConfig{
+				Startup: EggStartup{
 					Done:            ")! For help, type ",
 					UserInteraction: []string{"Go to eula.txt for more info."},
 				},
@@ -353,16 +353,16 @@ func TestApplicationCredentials_GetEggs(t *testing.T) {
 				CustomConfig: nil,
 				Extends:      "",
 			},
-			Startup:     "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
-			Script:      EggScript{
+			Startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
+			Script: EggScript{
 				Privileged: true,
 				Install:    "TEST_INSTALL",
 				Entry:      "ash",
 				Container:  "frolvlad/alpine-oraclejdk8:cleaned",
 				Extends:    "",
 			},
-			CreatedAt:   c2,
-			UpdatedAt:   u2,
+			CreatedAt: c2,
+			UpdatedAt: u2,
 		},
 	}
 
@@ -445,8 +445,8 @@ func TestApplicationCredentials_GetEgg(t *testing.T) {
 		Author:      "support@pterodactyl.io",
 		Description: "Spigot is the most widely-used modded Minecraft server software in the world. It powers many of the top Minecraft server networks around to ensure they can cope with their huge player base and ensure the satisfaction of their players. Spigot works by reducing and eliminating many causes of lag, as well as adding in handy features and settings that help make your job of server administration easier.",
 		DockerImage: "quay.io/pterodactyl/core:java-glibc",
-		Config:      EggConfig{
-			Startup:      EggStartup{
+		Config: EggConfig{
+			Startup: EggStartup{
 				Done:            ")! For help, type ",
 				UserInteraction: []string{"Go to eula.txt for more info."},
 			},
@@ -454,16 +454,16 @@ func TestApplicationCredentials_GetEgg(t *testing.T) {
 			CustomConfig: nil,
 			Extends:      "",
 		},
-		Startup:     "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
-		Script:      EggScript{
+		Startup: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
+		Script: EggScript{
 			Privileged: true,
 			Install:    "TEST_INSTALL",
 			Entry:      "ash",
 			Container:  "alpine:3.7",
 			Extends:    "",
 		},
-		CreatedAt:   c1,
-		UpdatedAt:   u1,
+		CreatedAt: c1,
+		UpdatedAt: u1,
 	}
 
 	got, err := a.GetEgg(1, 1)
