@@ -21,7 +21,6 @@ type Nest struct {
 
 // jsonNestPage is a slate to correctly parse responses from the API into JSON
 type jsonNestPage struct {
-	Object string `json:"object"`
 	Data   []struct {
 		Object string `json:"object"`
 		Nest   *Nest  `json:"attributes"`

@@ -40,6 +40,11 @@ Fossil is a pure Go wrapper library for the Pterodactyl API and it's descendants
         - [Nests and eggs](#app-nests)
             - [Fetch nests](#app-nests-fetch)
             - [Fetch eggs](#app-nests-fetch-eggs)
+        - [Locations](#app-locs)
+            - [Fetch](#app-locs-fetch)
+            - [Create](#app-locs-create)
+            - [Modify](#app-locs-modify)
+            - [Delete](#app-locs-delete)
 - [Disclaimer](#disclaimer)
 - [Licence](#licence)
 
@@ -479,6 +484,78 @@ if err != nil {
     return
 }
 ```
+
+<a name="app-locs"></a>
+### Locations
+<a name="app-locs-fetch"></a>
+##### Fetch locations
+```go
+locs, err := app.GetLocations()
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+
+for _, l := range locs{
+    fmt.Println(l.ID)
+    fmt.Println(l.Long)
+}
+```
+
+<a name="app-locs-fetch"></a>
+##### Fetch location
+```go
+loc, err := app.GetLocation(2) // Get location with ID 2
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
+##### Fetch location
+```go
+loc, err := app.GetLocation(2) // Get location with ID 2
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
+<a name="app-locs-create"></a>
+##### Create a location
+```go
+loc, err := app.CreatLocation("us.gameserver1", "USA Gameserver #1") // Short and long name
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
+<a name="app-locs-modify"></a>
+##### Modify a location's names
+```go
+loc := GetLocation(2)
+
+loc.ShortName = "us.datacenter"
+loc.LongName = "US Datacenter"
+
+err := app.UpdateLocationName(loc)
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
+<a name="app-locs-delete"></a>
+##### Delete a location
+```go
+err := app.DeleteLocation(2) // Delete location with ID 2
+if err != nil {
+    fmt.Println(err.Error())
+    return
+}
+```
+
 
 <a name="disclaimer"></a>
 ## Disclaimer
