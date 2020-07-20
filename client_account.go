@@ -2,7 +2,19 @@ package fossil
 
 import (
 	"encoding/json"
+	"time"
 )
+
+//***** Structs *****//
+
+// APIKey represents an API Key emitted to the user
+type APIKey struct {
+	Identifier  string    `json:"identifier"`
+	Description string    `json:"description"`
+	AllowedIPs  []string  `json:"allowed_ips"`
+	LastUsed    time.Time `json:"last_used_at"`
+	Created     time.Time `json:"created_at"`
+}
 
 //***** Requests *****//
 
@@ -115,16 +127,17 @@ func (c *ClientCredentials) UpdatePassword(oldPassword string, newPassword strin
 	return
 }
 
-
-// GetServer fetches the server with the given ID if it exists
-func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
-	bytes, err := c.query("servers/"+id+"?include=allocations", "GET", nil)
+// GetAPIKeys returns all the API keys emitted to the user
+func (c *ClientCredentials) GetAPIKeys() (keys []*APIKey, err error) {
+	bytes, err := c.query("account/api-keys", "GET", nil)
 	if err != nil {
 		return
 	}
 
 	var wrapper struct {
-		Server jsonServer `json:"attributes"`
+		Data []struct{
+			APIKey APIKey `json:"attributes"`
+		} `json:"data"`
 	}
 
 	err = json.Unmarshal(bytes, &wrapper)
@@ -132,94 +145,47 @@ func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
 		return
 	}
 
-	return wrapper.Server.asClientServer(), nil
-}
-
-// GetServers fetches all the servers of the client
-func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
-	bytes, err := c.query("?include=allocations", "GET", nil)
-	if err != nil {
-		return
-	}
-
-	// Get the initial page
-	var page jsonServerPage
-	err = json.Unmarshal(bytes, &page)
-	if err != nil {
-		return
-	}
-
-	// Search for the remaining pages if present
-	pages, err := page.getAll(c.Token)
-	if err != nil {
-		return
-	}
-
-	for _, page := range pages {
-		svs = append(svs, page.asClientServers()...)
+	for _, keyholder := range wrapper.Data{
+		keys = append(keys, &keyholder.APIKey)
 	}
 
 	return
 }
 
-// GetServerStatus fetches the server's status and usage
-func (c *ClientCredentials) GetServerStatus(id string) (ss *ServerStatus, err error) {
-	bytes, err := c.query("servers/"+id+"/utilization", "GET", nil)
+// NewAPIKey creates a new token and returns the key data and secret
+func (c *ClientCredentials) NewAPIKey(description string) (key *APIKey, secret string, err error) {
+	keyStruct := struct {
+		Description string `json:"description"`
+	}{Description: description}
+
+	rqBytes, err := json.Marshal(keyStruct)
+	if err != nil {
+		return nil, "", err
+	}
+
+	resBytes, err := c.query("account/api-keys", "POST", rqBytes)
 	if err != nil {
 		return
 	}
 
 	var wrapper struct {
-		Utilization *ServerStatus `json:"attributes"`
+		APIKey APIKey `json:"attributes"`
+		Meta struct {
+			SecretToken string `json:"secret_token"`
+		} `json:"meta"`
 	}
 
-	err = json.Unmarshal(bytes, &wrapper)
+	err = json.Unmarshal(resBytes, &wrapper)
 	if err != nil {
 		return
 	}
 
-	return wrapper.Utilization, nil
+	return &wrapper.APIKey, wrapper.Meta.SecretToken, nil
 }
 
-// ExecuteCommand allows the execution of a console command on the specified server
-func (c *ClientCredentials) ExecuteCommand(id string, cmd string) (err error) {
-	type wrapper struct {
-		Command string `json:"command"`
-	}
 
-	cmdWrapper := wrapper{Command: cmd}
-
-	rq, err := json.Marshal(cmdWrapper)
-	if err != nil {
-		return
-	}
-
-	_, err = c.query("servers/"+id+"/command", "POST", rq)
-	if err != nil {
-		return
-	}
-
-	return nil
-}
-
-// SetPowerState changes the power state of a server. Will result in error if the server is already in that state
-// or is unable to change state.
-func (c *ClientCredentials) SetPowerState(id string, state string) (err error) {
-	type wrapper struct {
-		Signal string `json:"signal"`
-	}
-
-	signalWrapper := wrapper{Signal: state}
-
-	rq, err := json.Marshal(signalWrapper)
-	if err != nil {
-		return
-	}
-
-	_, err = c.query("servers/"+id+"/power", "POST", rq)
-	if err != nil {
-		return
-	}
-
-	return nil
+// DeleteAPIKey deletes an existing API Key based on it's ID
+func (c *ClientCredentials) DeleteAPIKey(id string) (err error) {
+	_, err = c.query("account/api-keys/" + id, "DELETE", nil)
+	return
 }
