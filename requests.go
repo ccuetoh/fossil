@@ -46,7 +46,7 @@ func queryURL(url, token, method string, data []byte) ([]byte, error) {
 	rq, _ := http.NewRequest(method, url, bytes.NewBuffer(data))
 
 	rq.Header.Set("Authorization", "Bearer "+token)
-	rq.Header.Set("Accept", "Application/vnd.pterodactyl.v1+json")
+	rq.Header.Set("Accept", "application/json")
 	rq.Header.Set("Content-Type", "application/json")
 
 	rp, err := client.Do(rq)
