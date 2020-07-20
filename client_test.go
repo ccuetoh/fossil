@@ -16,8 +16,8 @@ func TestClientCredentials_WhoAmI(t *testing.T) {
 				"admin": true,
 				"username": "admin",
 				"email": "example@example.com",
-				"firstname": "RootAdmin",
-				"lastname": "User",
+				"first_name": "RootAdmin",
+				"last_name": "User",
 				"language": "en"
 			  }
 			}`
@@ -51,7 +51,7 @@ func TestClientCredentials_Get2FAImageURL(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		res := `{
 				  "data": {
-					"imageurldata": "otpauth:\/\/totp\/Pterodactyl:example%40example.com?secret=LGYOWJEGVRPPGPWATP5ZHOYC7DHAYQ6S&issuer=Pterodactyl"
+					"image_url_data": "otpauth:\/\/totp\/Pterodactyl:example%40example.com?secret=LGYOWJEGVRPPGPWATP5ZHOYC7DHAYQ6S&issuer=Pterodactyl"
 				  }
 				}`
 

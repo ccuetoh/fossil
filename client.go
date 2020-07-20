@@ -38,7 +38,7 @@ func (c *ClientCredentials) Get2FAImageURL() (imageData string, err error) {
 
 	var wrapper struct {
 		Data struct{
-			URL string `json:"imageurldata"`
+			URL string `json:"image_url_data"`
 		} `json:"data"`
 	}
 
@@ -79,6 +79,8 @@ func (c *ClientCredentials) Disable2FA(password string) (err error) {
 	_, err = c.query("account/two-factor", "DELETE", bytes)
 	return
 }
+
+// Account settings
 
 // UpdateEmail modifies the email address of the account
 func (c *ClientCredentials) UpdateEmail(email string, password string) (err error) {
