@@ -120,6 +120,54 @@ func TestClientCredentials_Disable2FA(t *testing.T) {
 	}
 }
 
+func TestClientCredentials_UpdateEmail(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		expectBody := `{"email":"testemail","password":"testpassword"}`
+		expectURL := "https://example.com/api/client/account/email"
+
+		if expectBody != string(data) {
+			t.Errorf("Request data does not match expected: %s", string(data))
+		}
+
+		if expectURL != url {
+			t.Errorf("Request url does not match expected: %s", url)
+		}
+
+		return nil, nil
+	}
+
+	c := NewClient("https://example.com", "")
+
+	err := c.UpdateEmail("testemail", "testpassword")
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+}
+
+func TestClientCredentials_UpdatePassword(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		expectBody := `{"current_password":"testoldpass","password":"testnewpass","password_confirmation":"testnewpass"}`
+		expectURL := "https://example.com/api/client/account/password"
+
+		if expectBody != string(data) {
+			t.Errorf("Request data does not match expected: %s", string(data))
+		}
+
+		if expectURL != url {
+			t.Errorf("Request url does not match expected: %s", url)
+		}
+
+		return nil, nil
+	}
+
+	c := NewClient("https://example.com", "")
+
+	err := c.UpdatePassword("testoldpass", "testnewpass")
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+}
+
 func TestClientCredentials_GetServers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		// The response is provided by the Pterodactyl API Documentation. The meta.pagination.links parameter

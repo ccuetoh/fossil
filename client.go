@@ -80,6 +80,39 @@ func (c *ClientCredentials) Disable2FA(password string) (err error) {
 	return
 }
 
+// UpdateEmail modifies the email address of the account
+func (c *ClientCredentials) UpdateEmail(email string, password string) (err error) {
+	emailStruct := struct {
+		Email string `json:"email"`
+		Password string `json:"password"`
+	}{Password: password, Email: email}
+
+	bytes, err := json.Marshal(emailStruct)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.query("account/email", "PUT", bytes)
+	return
+}
+
+// UpdatePassword modifies the password of the account
+func (c *ClientCredentials) UpdatePassword(oldPassword string, newPassword string) (err error) {
+	passStruct := struct {
+		OldPassword        string `json:"current_password"`
+		NewPassword        string `json:"password"`
+		NewPasswordConfirm string `json:"password_confirmation"`
+	}{OldPassword: oldPassword, NewPassword: newPassword, NewPasswordConfirm: newPassword}
+
+	bytes, err := json.Marshal(passStruct)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.query("account/password", "PUT", bytes)
+	return
+}
+
 
 // GetServer fetches the server with the given ID if it exists
 func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
