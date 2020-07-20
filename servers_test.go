@@ -136,7 +136,6 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 			Description: "",
 			Limits: Limits{
 				Memory:      2048,
-				Swap:        -1,
 				Disk:        10000,
 				IO:          500,
 				CPU:         300,
@@ -147,11 +146,11 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 			UUID:       "47a7052b-f07e-4845-989d-e876e30960f4",
 			Suspended:  false,
 			User:       1,
-			Node:       2,
+			Node:       "2",
 			Nest:       1,
 			Egg:        4,
 			Pack:       0,
-			Allocation: 3,
+			Allocation: Allocation{},
 			Container: Container{
 				StartupCommand: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
 				Image:          "quay.io/pterodactyl/core:java",
@@ -173,7 +172,6 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 			Description: "t",
 			Limits: Limits{
 				Memory:      0,
-				Swap:        -1,
 				Disk:        5000,
 				IO:          500,
 				CPU:         200,
@@ -184,11 +182,11 @@ func TestApplicationCredentials_GetServers(t *testing.T) {
 			UUID:       "6d1567c5-08d4-4ecb-8d5d-0ce1ba6b0b99",
 			Suspended:  false,
 			User:       5,
-			Node:       2,
+			Node:       "2",
 			Nest:       1,
 			Egg:        15,
 			Pack:       0,
-			Allocation: 4,
+			Allocation: Allocation{},
 			Container: Container{
 				StartupCommand: "./parkertron",
 				Image:          "quay.io/parkervcp/pterodactyl-images:parkertron",
@@ -279,7 +277,6 @@ func TestApplicationCredentials_GetServer(t *testing.T) {
 		Description: "gsk;ljgkj;hgdakl;gha",
 		Limits: Limits{
 			Memory:      2048,
-			Swap:        -1,
 			Disk:        10000,
 			IO:          500,
 			CPU:         300,
@@ -290,11 +287,11 @@ func TestApplicationCredentials_GetServer(t *testing.T) {
 		UUID:       "47a7052b-f07e-4845-989d-e876e30960f4",
 		Suspended:  false,
 		User:       1,
-		Node:       2,
+		Node:       "2",
 		Nest:       1,
 		Egg:        4,
 		Pack:       0,
-		Allocation: 3,
+		Allocation: Allocation{},
 		Container: Container{
 			StartupCommand: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
 			Image:          "quay.io/pterodactyl/core:java",
@@ -386,7 +383,6 @@ func TestApplicationCredentials_GetServerExternal(t *testing.T) {
 		Description: "ok....",
 		Limits: Limits{
 			Memory:      1024,
-			Swap:        0,
 			Disk:        1000,
 			IO:          500,
 			CPU:         0,
@@ -397,11 +393,11 @@ func TestApplicationCredentials_GetServerExternal(t *testing.T) {
 		UUID:       "78165af0-4835-405f-b281-07e961bfd0ad",
 		Suspended:  false,
 		User:       1,
-		Node:       2,
+		Node:       "2",
 		Nest:       1,
 		Egg:        4,
 		Pack:       0,
-		Allocation: 9,
+		Allocation: Allocation{},
 		Container: Container{
 			StartupCommand: "java -Xms128M -Xmx{{SERVER_MEMORY}}M -jar {{SERVER_JARFILE}}",
 			Image:          "quay.io/pterodactyl/core:java",
@@ -503,10 +499,9 @@ func TestApplicationCredentials_UpdateBuild(t *testing.T) {
 
 	sv := &ApplicationServer{
 		ID:         1,
-		Allocation: 9,
+		Allocation: Allocation{},
 		Limits: Limits{
 			Memory:      2048,
-			Swap:        -1,
 			Disk:        10000,
 			IO:          500,
 			CPU:         300,

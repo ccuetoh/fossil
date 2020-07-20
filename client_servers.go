@@ -6,24 +6,7 @@ import (
 
 //***** Requests *****//
 
-// GetServer fetches the server with the given ID if it exists
-func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
-	bytes, err := c.query("servers/"+id+"?include=allocations", "GET", nil)
-	if err != nil {
-		return
-	}
-
-	var wrapper struct {
-		Server jsonServer `json:"attributes"`
-	}
-
-	err = json.Unmarshal(bytes, &wrapper)
-	if err != nil {
-		return
-	}
-
-	return wrapper.Server.asClientServer(), nil
-}
+// Servers
 
 // GetServers fetches all the servers of the client
 func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
@@ -50,6 +33,25 @@ func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
 	}
 
 	return
+}
+
+// GetServer fetches the server with the given ID if it exists
+func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
+	bytes, err := c.query("servers/"+id+"?include=allocations", "GET", nil)
+	if err != nil {
+		return
+	}
+
+	var wrapper struct {
+		Server jsonServer `json:"attributes"`
+	}
+
+	err = json.Unmarshal(bytes, &wrapper)
+	if err != nil {
+		return
+	}
+
+	return wrapper.Server.asClientServer(), nil
 }
 
 // GetServerStatus fetches the server's status and usage

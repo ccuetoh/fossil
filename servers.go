@@ -20,12 +20,16 @@ const (
 
 // ClientServer defines Pterodactyl server as a user would see it. It is fetched and interacted with the client token.
 type ClientServer struct {
-	ID                string
-	Name              string
-	Description       string
-	Limits            Limits
-	AllocationDetails []Allocation
-	IsOwner           bool
+	ID           string
+	UUID         string
+	Name         string
+	Description  string
+	Node         string
+	Limits       Limits
+	SFTPDetails  SFTPDetails
+	Allocation   Allocation
+	IsOwner      bool
+	IsInstalling bool
 }
 
 // ApplicationServer defines Pterodactyl server as an administrator would see it. It is fetched and interacted with
@@ -39,12 +43,11 @@ type ApplicationServer struct {
 	UUID               string
 	Suspended          bool
 	User               int
-	Node               int
+	Node               string
 	Nest               int
 	Egg                int
 	Pack               int
-	Allocation         int
-	AllocationsDetails []Allocation
+	Allocation         Allocation
 	Container          Container
 	Updated            time.Time
 	Created            time.Time
@@ -61,27 +64,23 @@ type jsonServer struct {
 	Description   string `json:"description"`
 	Suspended     bool   `json:"suspended"`
 	ServerOwner   bool   `json:"server_owner"`
+	IsInstalling  bool   `json:"is_installing"`
 	Limits        Limits `json:"limits"`
 	FeatureLimits struct {
 		Databases   int `json:"databases"`
 		Allocations int `json:"allocations"`
+		Backups     int `json:"backups"`
 	} `json:"feature_limits"`
-	User          int       `json:"user"`
-	Node          int       `json:"node"`
-	Allocation    int       `json:"allocation"`
-	Nest          int       `json:"nest"`
-	Egg           int       `json:"egg"`
-	Pack          int       `json:"pack"`
-	Container     Container `json:"container"`
-	UpdatedAt     time.Time `json:"updated_at"`
-	CreatedAt     time.Time `json:"created_at"`
-	Relationships struct {
-		Allocations struct {
-			Data []struct {
-				Allocation *Allocation `json:"attributes"`
-			} `json:"data"`
-		} `json:"allocations"`
-	} `json:"relationships"`
+	SFTPDetails   SFTPDetails `json:"sftp_details"`
+	User          int         `json:"user"`
+	Node          string      `json:"node"`
+	Allocation    Allocation         `json:"allocation"`
+	Nest          int         `json:"nest"`
+	Egg           int         `json:"egg"`
+	Pack          int         `json:"pack"`
+	Container     Container   `json:"container"`
+	UpdatedAt     time.Time   `json:"updated_at"`
+	CreatedAt     time.Time   `json:"created_at"`
 }
 
 // jsonServerCreation stores the server info in an API-ready format for server creation
@@ -98,14 +97,11 @@ type jsonServerCreation struct {
 		Databases   int `json:"databases"`
 		Allocations int `json:"allocations"`
 	} `json:"feature_limits"`
-	User       int `json:"user"`
-	Node       int `json:"node"`
-	Allocation struct {
-		Default    int   `json:"default,omitempty"`
-		Additional []int `json:"additional,omitempty"`
-	} `json:"allocation"`
-	Nest int `json:"nest"`
-	Egg  int `json:"egg"`
+	User       int        `json:"user"`
+	Node       string     `json:"node"`
+	Allocation Allocation `json:"allocation"`
+	Nest       int        `json:"nest"`
+	Egg        int        `json:"egg"`
 }
 
 // jsonServerPage contains a page of jsonServers and the pagination data.
@@ -120,12 +116,18 @@ type jsonServerPage struct {
 // Limits contains all the allocated usage limits set for a server
 type Limits struct {
 	Memory      int `json:"memory"`
-	Swap        int `json:"swap"`
 	Disk        int `json:"disk"`
 	IO          int `json:"io"`
 	CPU         int `json:"cpu"`
 	Databases   int `json:"-"`
 	Allocations int `json:"-"`
+	Backups     int `json:"-"`
+}
+
+// SFTP details contains the connection data to access the server through secure FTP
+type SFTPDetails struct {
+	IP   string `json:"ip"`
+	Port int    `json:"port"`
 }
 
 // Container holds all the Docker Image settings
@@ -138,9 +140,7 @@ type Container struct {
 
 // Allocation holds all the information relating to the allocation data of a server
 type Allocation struct {
-	Primary bool   `json:"primary"`
 	IP      string `json:"ip"`
-	Alias   string `json:"alias"`
 	Port    int    `json:"port"`
 }
 
@@ -186,18 +186,20 @@ type Players struct {
 // asClientServer parses a jsonServer into a *ClientServer
 func (s *jsonServer) asClientServer() *ClientServer {
 	cs := &ClientServer{
-		ID:          s.Identifier,
-		Name:        s.Name,
-		Description: s.Description,
-		Limits:      s.Limits,
-		IsOwner:     s.ServerOwner,
+		ID:           s.Identifier,
+		Name:         s.Name,
+		Description:  s.Description,
+		Limits:       s.Limits,
+		IsOwner:      s.ServerOwner,
+		UUID:         s.UUID,
+		Node:         s.Node,
+		IsInstalling: s.IsInstalling,
+		SFTPDetails:  s.SFTPDetails,
+		Allocation:   s.Allocation,
 	}
 	cs.Limits.Databases = s.FeatureLimits.Databases
 	cs.Limits.Allocations = s.FeatureLimits.Allocations
-
-	for _, alloc := range s.Relationships.Allocations.Data {
-		cs.AllocationDetails = append(cs.AllocationDetails, *alloc.Allocation)
-	}
+	cs.Limits.Backups = s.FeatureLimits.Backups
 
 	return cs
 }
@@ -234,10 +236,6 @@ func (s *jsonServer) asApplicationServer() *ApplicationServer {
 
 	as.Limits.Databases = s.FeatureLimits.Databases
 
-	for _, alloc := range s.Relationships.Allocations.Data {
-		as.AllocationsDetails = append(as.AllocationsDetails, *alloc.Allocation)
-	}
-
 	return as
 }
 
@@ -258,7 +256,6 @@ func (s *ApplicationServer) asJSONServerCreation() *jsonServerCreation {
 		Description: s.Description,
 		Limits: Limits{
 			Memory: s.Limits.Memory,
-			Swap:   s.Limits.Swap,
 			Disk:   s.Limits.Disk,
 			IO:     s.Limits.IO,
 			CPU:    s.Limits.CPU,
@@ -270,17 +267,10 @@ func (s *ApplicationServer) asJSONServerCreation() *jsonServerCreation {
 		DockerImage: s.Container.Image,
 		Startup:     s.Container.StartupCommand,
 		Environment: s.Container.Environment,
+		Allocation:  s.Allocation,
 	}
 
 	js.FeatureLimits.Databases = s.Limits.Databases
-	js.Allocation.Default = s.Allocation
-
-	for _, alloc := range s.AllocationsDetails {
-		if s.Allocation == alloc.Port {
-			continue
-		}
-		js.Allocation.Additional = append(js.Allocation.Additional, alloc.Port)
-	}
 
 	return js
 }
@@ -432,11 +422,11 @@ func (c *ApplicationCredentials) UpdateDetails(sv *ApplicationServer) (err error
 // UpdateBuild modifies the server's limit and allocation configuration
 func (c *ApplicationCredentials) UpdateBuild(sv *ApplicationServer, addAlloc []int, removeAlloc []int) (err error) {
 	type build struct {
-		Allocation        int     `json:"allocation,omitempty"`
-		OOM               bool    `json:"oom_disabled"`
-		Limits            *Limits `json:"limits,omitempty"`
-		AddAllocations    []int   `json:"add_allocations,omitempty"`
-		RemoveAllocations []int   `json:"remove_allocations,omitempty"`
+		Allocation        Allocation `json:"allocation,omitempty"`
+		OOM               bool       `json:"oom_disabled"`
+		Limits            *Limits    `json:"limits,omitempty"`
+		AddAllocations    []int      `json:"add_allocations,omitempty"`
+		RemoveAllocations []int      `json:"remove_allocations,omitempty"`
 		FeatureLimits     struct {
 			Databases   int `json:"databases"`
 			Allocations int `json:"allocations,omitempty"`

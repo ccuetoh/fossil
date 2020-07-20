@@ -9,45 +9,54 @@ import (
 
 func TestClientCredentials_GetServers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
-		// The response is provided by the Pterodactyl API Documentation. The meta.pagination.links parameter
-		// has been modified from [] to {} since all analyzed responses do not, respond with an array but an
-		// empty object. See: https://github.com/parkervcp/crocgodyl/issues/8
 		res := `{
-		   "object":"list",
-		   "data":[
-			  {
-				 "object":"server",
-				 "attributes":{
-					"server_owner":true,
-					"identifier":"d3aac109",
-					"uuid":"d3aac109-e5a0-4331-b03e-3454f7e136dc",
-					"name":"Survival",
-					"description":"",
-					"limits":{
-					   "memory":1024,
-					   "swap":0,
-					   "disk":5000,
-					   "io":500,
-					   "cpu":200
-					},
-					"feature_limits":{
-					   "databases":5,
-					   "allocations":5
+				  "object": "list",
+				  "data": [
+					{
+					  "object": "server",
+					  "attributes": {
+						"server_owner": true,
+						"identifier": "1a7ce997",
+						"uuid": "1a7ce997-259b-452e-8b4e-cecc464142ca",
+						"name": "Wuhu Island",
+						"node": "Test",
+						"sftp_details": {
+						  "ip": "pterodactyl.file.properties",
+						  "port": 2022
+						},
+						"description": "Matt from Wii Sports",
+						"allocation": {
+						  "ip": "45.86.168.218",
+						  "port": 25565
+						},
+						"limits": {
+						  "memory": 512,
+						  "swap": 0,
+						  "disk": 200,
+						  "io": 500,
+						  "cpu": 0
+						},
+						"feature_limits": {
+						  "databases": 5,
+						  "allocations": 5,
+						  "backups": 2
+						},
+						"is_suspended": false,
+						"is_installing": false
+					  }
 					}
-				 }
-			  }
-		   ],
-		   "meta":{
-			  "pagination":{
-				 "total":1,
-				 "count":1,
-				 "per_page":25,
-				 "current_page":1,
-				 "total_pages":1,
-				 "links": { } 
-			  }
-		   }
-		}`
+				  ],
+				  "meta": {
+					"pagination": {
+					  "total": 1,
+					  "count": 1,
+					  "per_page": 15,
+					  "current_page": 1,
+					  "total_pages": 1,
+					  "links": {}
+					}
+				  }
+				}`
 
 		return []byte(res), nil
 	}
@@ -56,19 +65,30 @@ func TestClientCredentials_GetServers(t *testing.T) {
 
 	expect := []*ClientServer{
 		{
-			ID:          "d3aac109",
-			Name:        "Survival",
-			Description: "",
+			ID:          "1a7ce997",
+			UUID:        "1a7ce997-259b-452e-8b4e-cecc464142ca",
+			Name:        "Wuhu Island",
+			Description: "Matt from Wii Sports",
+			IsOwner: true,
+			IsInstalling: false,
+			Node:        "Test",
+			SFTPDetails: SFTPDetails{
+				IP:   "pterodactyl.file.properties",
+				Port: 2022,
+			},
+			Allocation: Allocation{
+				IP:   "45.86.168.218",
+				Port: 25565,
+			},
 			Limits: Limits{
-				Memory:      1024,
-				Swap:        0,
-				Disk:        5000,
+				Memory:      512,
+				Disk:        200,
 				IO:          500,
-				CPU:         200,
+				CPU:         0,
 				Databases:   5,
 				Allocations: 5,
+				Backups: 2,
 			},
-			IsOwner: true,
 		},
 	}
 
@@ -117,7 +137,6 @@ func TestClientCredentials_GetServer(t *testing.T) {
 		Description: "",
 		Limits: Limits{
 			Memory:      1024,
-			Swap:        0,
 			Disk:        5000,
 			IO:          500,
 			CPU:         200,
