@@ -105,45 +105,113 @@ func TestClientCredentials_GetServers(t *testing.T) {
 func TestClientCredentials_GetServer(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		res := `{
-		   "object":"server",
-		   "attributes":{
-			  "server_owner":true,
-			  "identifier":"d3aac109",
-			  "uuid":"d3aac109-e5a0-4331-b03e-3454f7e136dc",
-			  "name":"Survival",
-			  "description":"",
-			  "limits":{
-				 "memory":1024,
-				 "swap":0,
-				 "disk":5000,
-				 "io":500,
-				 "cpu":200
+			  "object": "server",
+			  "attributes": {
+				"server_owner": true,
+				"identifier": "1a7ce997",
+				"uuid": "1a7ce997-259b-452e-8b4e-cecc464142ca",
+				"name": "Wuhu Island",
+				"node": "Test",
+				"sftp_details": {
+				  "ip": "pterodactyl.file.properties",
+				  "port": 2022
+				},
+				"description": "Matt from Wii Sports",
+				"limits": {
+				  "memory": 512,
+				  "swap": 0,
+				  "disk": 200,
+				  "io": 500,
+				  "cpu": 0
+				},
+				"feature_limits": {
+				  "databases": 5,
+				  "allocations": 5,
+				  "backups": 2
+				},
+				"is_suspended": false,
+				"is_installing": false,
+				"relationships": {
+				  "allocations": {
+					"object": "list",
+					"data": [
+					  {
+						"object": "allocation",
+						"attributes": {
+						  "id": 1,
+						  "ip": "45.86.168.218",
+						  "ip_alias": null,
+						  "port": 25565,
+						  "notes": null,
+						  "is_default": true
+						}
+					  },
+					  {
+						"object": "allocation",
+						"attributes": {
+						  "id": 2,
+						  "ip": "45.86.168.218",
+						  "ip_alias": null,
+						  "port": 25566,
+						  "notes": null,
+						  "is_default": false
+						}
+					  }
+					]
+				  }
+				}
 			  },
-			  "feature_limits":{
-				 "databases":5,
-				 "allocations":5
+			  "meta": {
+				"is_server_owner": true,
+				"user_permissions": [
+				  "*",
+				  "admin.websocket.errors",
+				  "admin.websocket.install"
+				]
 			  }
-		   }
-		}`
+			}`
 
 		return []byte(res), nil
 	}
 
 	c := NewClient("", "")
 
-	expect := &ClientServer{
-		ID:          "d3aac109",
-		Name:        "Survival",
-		Description: "",
+	expect := &ClientServerDetail{
+		ID:           "1a7ce997",
+		UUID:         "1a7ce997-259b-452e-8b4e-cecc464142ca",
+		Name:         "Wuhu Island",
+		Description:  "Matt from Wii Sports",
+		IsOwner:      true,
+		IsInstalling: false,
+		Node:         "Test",
+		SFTPDetails: SFTPDetails{
+			IP:   "pterodactyl.file.properties",
+			Port: 2022,
+		},
+		Allocations: []*AllocationDetails{
+			{
+				ID:        1,
+				IP:        "45.86.168.218",
+				Port:      25565,
+				IsDefault: true,
+			},
+			{
+				ID:        2,
+				IP:        "45.86.168.218",
+				Port:      25566,
+				IsDefault: false,
+			},
+		},
 		Limits: Limits{
-			Memory:      1024,
-			Disk:        5000,
+			Memory:      512,
+			Disk:        200,
 			IO:          500,
-			CPU:         200,
+			CPU:         0,
 			Databases:   5,
 			Allocations: 5,
+			Backups:     2,
 		},
-		IsOwner: true,
+		Permissions: []string{"*", "admin.websocket.errors", "admin.websocket.install"},
 	}
 
 	got, err := c.GetServer("")
@@ -152,7 +220,7 @@ func TestClientCredentials_GetServer(t *testing.T) {
 	}
 
 	if !cmp.Equal(got, expect) {
-		t.Error("Unexpected response")
+		t.Errorf("Unexpected response: %s", cmp.Diff(got, expect))
 	}
 }
 

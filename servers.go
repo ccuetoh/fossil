@@ -18,7 +18,8 @@ const (
 
 // Servers
 
-// ClientServer defines Pterodactyl server as a user would see it. It is fetched and interacted with the client token.
+// ClientServer defines Pterodactyl server as a user would see it from the server list.\
+// It is fetched and interacted with the client token.
 type ClientServer struct {
 	ID           string
 	UUID         string
@@ -30,6 +31,33 @@ type ClientServer struct {
 	Allocation   Allocation
 	IsOwner      bool
 	IsInstalling bool
+}
+
+// ClientServerDetail defines Pterodactyl server as a user would see it from the server details view.
+// It is fetched and interacted with the client token.
+type ClientServerDetail struct {
+	ID           string
+	UUID         string
+	Name         string
+	Description  string
+	Node         string
+	Limits       Limits
+	SFTPDetails  SFTPDetails
+	Allocations  []*AllocationDetails
+	IsOwner      bool
+	IsInstalling bool
+	IsSuspended  bool
+	Permissions  []string
+}
+
+// AllocationDetails extended allocation info
+type AllocationDetails struct {
+	ID        int    `json:"id"`
+	IP        string `json:"ip"`
+	IPAlias   string `json:"ip_alias"`
+	Port      int    `json:"port"`
+	Notes     string `json:"notes"`
+	IsDefault bool   `json:"is_default"`
 }
 
 // ApplicationServer defines Pterodactyl server as an administrator would see it. It is fetched and interacted with
@@ -65,22 +93,30 @@ type jsonServer struct {
 	Suspended     bool   `json:"suspended"`
 	ServerOwner   bool   `json:"server_owner"`
 	IsInstalling  bool   `json:"is_installing"`
+	IsSuspended   bool   `json:"is_suspended"`
 	Limits        Limits `json:"limits"`
 	FeatureLimits struct {
 		Databases   int `json:"databases"`
 		Allocations int `json:"allocations"`
 		Backups     int `json:"backups"`
 	} `json:"feature_limits"`
-	SFTPDetails   SFTPDetails `json:"sftp_details"`
-	User          int         `json:"user"`
-	Node          string      `json:"node"`
-	Allocation    Allocation         `json:"allocation"`
-	Nest          int         `json:"nest"`
-	Egg           int         `json:"egg"`
-	Pack          int         `json:"pack"`
-	Container     Container   `json:"container"`
-	UpdatedAt     time.Time   `json:"updated_at"`
-	CreatedAt     time.Time   `json:"created_at"`
+	SFTPDetails SFTPDetails `json:"sftp_details"`
+	User        int         `json:"user"`
+	Node        string      `json:"node"`
+	Allocation  Allocation  `json:"allocation"`
+	Nest        int         `json:"nest"`
+	Egg         int         `json:"egg"`
+	Pack        int         `json:"pack"`
+	Container   Container   `json:"container"`
+	UpdatedAt   time.Time   `json:"updated_at"`
+	CreatedAt   time.Time   `json:"created_at"`
+	Relationships struct {
+		Allocations struct {
+			Data []struct{
+				Allocation *AllocationDetails `json:"attributes"`
+			} `json:"data"`
+		} `json:"allocations"`
+	} `json:"relationships"`
 }
 
 // jsonServerCreation stores the server info in an API-ready format for server creation
@@ -211,6 +247,31 @@ func (sp *jsonServerPage) asClientServers() (servers []*ClientServer) {
 	}
 
 	return servers
+}
+
+// asClientServers parses a jsonServer into a *ClientServerDetails
+func (s *jsonServer) asClientServerDetail() *ClientServerDetail {
+	csd := &ClientServerDetail{
+		ID:           s.Identifier,
+		UUID:         s.UUID,
+		Name:         s.Name,
+		Description:  s.Description,
+		Node:         s.Node,
+		Limits:       s.Limits,
+		SFTPDetails:  s.SFTPDetails,
+		IsInstalling: s.IsInstalling,
+		IsSuspended:  s.IsSuspended,
+	}
+
+	csd.Limits.Databases = s.FeatureLimits.Databases
+	csd.Limits.Allocations = s.FeatureLimits.Allocations
+	csd.Limits.Backups = s.FeatureLimits.Backups
+
+	for _, data := range s.Relationships.Allocations.Data {
+		csd.Allocations = append(csd.Allocations, data.Allocation)
+	}
+
+	return csd
 }
 
 // asApplicationServer parses a jsonServer into an *ApplicationServer

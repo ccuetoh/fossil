@@ -36,14 +36,18 @@ func (c *ClientCredentials) GetServers() (svs []*ClientServer, err error) {
 }
 
 // GetServer fetches the server with the given ID if it exists
-func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
-	bytes, err := c.query("servers/"+id+"?include=allocations", "GET", nil)
+func (c *ClientCredentials) GetServer(id string) (sv *ClientServerDetail, err error) {
+	bytes, err := c.query("servers/"+id, "GET", nil)
 	if err != nil {
 		return
 	}
 
 	var wrapper struct {
 		Server jsonServer `json:"attributes"`
+		Meta   struct {
+			IsOwner         bool     `json:"is_server_owner"`
+			UserPermissions []string `json:"user_permissions"`
+		} `json:"meta"`
 	}
 
 	err = json.Unmarshal(bytes, &wrapper)
@@ -51,7 +55,11 @@ func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
 		return
 	}
 
-	return wrapper.Server.asClientServer(), nil
+	sv = wrapper.Server.asClientServerDetail()
+	sv.Permissions = wrapper.Meta.UserPermissions
+	sv.IsOwner = wrapper.Meta.IsOwner
+
+	return sv, nil
 }
 
 // GetServerStatus fetches the server's status and usage
