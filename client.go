@@ -6,6 +6,81 @@ import (
 
 //***** Requests *****//
 
+// User info
+
+// WhoAmI fetches information about the current account
+func (c *ClientCredentials) WhoAmI() (me *Me, err error) {
+	bytes, err := c.query("account", "GET", nil)
+	if err != nil {
+		return
+	}
+
+	var wrapper struct {
+		Me Me `json:"attributes"`
+	}
+
+	err = json.Unmarshal(bytes, &wrapper)
+	if err != nil {
+		return
+	}
+
+	return &wrapper.Me, nil
+}
+
+// Two-factor authentication
+
+// Get2FAImageURL gets the two-factor authentication QR code for the setup process
+func (c *ClientCredentials) Get2FAImageURL() (imageData string, err error) {
+	bytes, err := c.query("account/two-factor", "GET", nil)
+	if err != nil {
+		return
+	}
+
+	var wrapper struct {
+		Data struct{
+			URL string `json:"imageurldata"`
+		} `json:"data"`
+	}
+
+	err = json.Unmarshal(bytes, &wrapper)
+	if err != nil {
+		return
+	}
+
+	return wrapper.Data.URL, nil
+}
+
+// Enable2FA setups two-factor authentication in the account
+func (c *ClientCredentials) Enable2FA(code string) (err error) {
+	codeStruct := struct {
+		Code string `json:"code"`
+	}{Code: code}
+
+	bytes, err := json.Marshal(codeStruct)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.query("account/two-factor", "POST", bytes)
+	return
+}
+
+// Disable2FA removes two-factor authentication from the account
+func (c *ClientCredentials) Disable2FA(password string) (err error) {
+	passStruct := struct {
+		Password string `json:"password"`
+	}{Password: password}
+
+	bytes, err := json.Marshal(passStruct)
+	if err != nil {
+		return err
+	}
+
+	_, err = c.query("account/two-factor", "DELETE", bytes)
+	return
+}
+
+
 // GetServer fetches the server with the given ID if it exists
 func (c *ClientCredentials) GetServer(id string) (sv *ClientServer, err error) {
 	bytes, err := c.query("servers/"+id+"?include=allocations", "GET", nil)

@@ -7,6 +7,119 @@ import (
 
 //***** Testing *****//
 
+func TestClientCredentials_WhoAmI(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		res := `{
+			  "object": "user",
+			  "attributes": {
+				"id": 1,
+				"admin": true,
+				"username": "admin",
+				"email": "example@example.com",
+				"firstname": "RootAdmin",
+				"lastname": "User",
+				"language": "en"
+			  }
+			}`
+
+		return []byte(res), nil
+	}
+
+	c := NewClient("", "")
+
+	expect := &User{
+		ID:        1,
+		Username:  "admin",
+		Email:     "example@example.com",
+		FirstName: "RootAdmin",
+		LastName:  "User",
+		Language:  "en",
+		RootAdmin: true,
+	}
+
+	got, err := c.WhoAmI()
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+
+	if cmp.Equal(got, expect) {
+		t.Error("Unexpected response")
+	}
+}
+
+func TestClientCredentials_Get2FAImageURL(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		res := `{
+				  "data": {
+					"imageurldata": "otpauth:\/\/totp\/Pterodactyl:example%40example.com?secret=LGYOWJEGVRPPGPWATP5ZHOYC7DHAYQ6S&issuer=Pterodactyl"
+				  }
+				}`
+
+		return []byte(res), nil
+	}
+
+	c := NewClient("", "")
+
+	expect := `otpauth://totp/Pterodactyl:example%40example.com?secret=LGYOWJEGVRPPGPWATP5ZHOYC7DHAYQ6S&issuer=Pterodactyl`
+
+	got, err := c.Get2FAImageURL()
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+
+	if !cmp.Equal(got, expect) {
+		t.Error("Unexpected response")
+	}
+}
+
+func TestClientCredentials_Enable2FA(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		expectBody := `{"code":"testcode"}`
+		expectURL := "https://example.com/api/client/account/two-factor"
+
+		if expectBody != string(data) {
+			t.Errorf("Request data does not match expected: %s", string(data))
+		}
+
+		if expectURL != url {
+			t.Errorf("Request url does not match expected: %s", url)
+		}
+
+		return nil, nil
+	}
+
+	c := NewClient("https://example.com", "")
+
+	err := c.Enable2FA("testcode")
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+}
+
+func TestClientCredentials_Disable2FA(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		expectBody := `{"password":"testpassword"}`
+		expectURL := "https://example.com/api/client/account/two-factor"
+
+		if expectBody != string(data) {
+			t.Errorf("Request data does not match expected: %s", string(data))
+		}
+
+		if expectURL != url {
+			t.Errorf("Request url does not match expected: %s", url)
+		}
+
+		return nil, nil
+	}
+
+	c := NewClient("https://example.com", "")
+
+	err := c.Disable2FA("testpassword")
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+}
+
 func TestClientCredentials_GetServers(t *testing.T) {
 	query = func(url, token, method string, data []byte) ([]byte, error) {
 		// The response is provided by the Pterodactyl API Documentation. The meta.pagination.links parameter
@@ -77,7 +190,7 @@ func TestClientCredentials_GetServers(t *testing.T) {
 		t.Errorf("Error: %s", err.Error())
 	}
 
-	if cmp.Equal(got, expect) {
+	if !cmp.Equal(got, expect) {
 		t.Error("Unexpected response")
 	}
 }
@@ -132,7 +245,7 @@ func TestClientCredentials_GetServer(t *testing.T) {
 		t.Errorf("Error: %s", err.Error())
 	}
 
-	if cmp.Equal(got, expect) {
+	if !cmp.Equal(got, expect) {
 		t.Error("Unexpected response")
 	}
 }
@@ -221,7 +334,7 @@ func TestClientCredentials_GetStatus(t *testing.T) {
 		t.Errorf("Error: %s", err.Error())
 	}
 
-	if cmp.Equal(got, expect) {
+	if !cmp.Equal(got, expect) {
 		t.Error("Unexpected response")
 	}
 }

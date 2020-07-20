@@ -24,6 +24,17 @@ type User struct {
 	UpdatedAt               time.Time `json:"updated_at"`
 }
 
+// Me holds user information about the current account
+type Me struct {
+	ID                      int       `json:"id"`
+	Username                string    `json:"username"`
+	Email                   string    `json:"email"`
+	FirstName               string    `json:"first_name"`
+	LastName                string    `json:"last_name"`
+	Language                string    `json:"language"`
+	Admin                   bool      `json:"admin"`
+}
+
 // jsonUserPage contains a page of Users and the pagination data.
 // It's used as the target struct in the marshalling/unmarshalling of API requests or responses.
 type jsonUserPage struct {
