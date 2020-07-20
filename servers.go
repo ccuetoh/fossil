@@ -193,6 +193,7 @@ func (s *jsonServer) asClientServer() *ClientServer {
 		IsOwner:     s.ServerOwner,
 	}
 	cs.Limits.Databases = s.FeatureLimits.Databases
+	cs.Limits.Allocations = s.FeatureLimits.Allocations
 
 	for _, alloc := range s.Relationships.Allocations.Data {
 		cs.AllocationDetails = append(cs.AllocationDetails, *alloc.Allocation)
