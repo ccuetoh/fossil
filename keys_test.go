@@ -110,3 +110,21 @@ func TestClientCredentials_NewAPIKey(t *testing.T) {
 		t.Error("Unexpected response for APIKey object")
 	}
 }
+
+func TestClientCredentials_DeleteAPIKey(t *testing.T) {
+	query = func(url, token, method string, data []byte) ([]byte, error) {
+		expectURL := "https://example.com/api/client/account/api-keys/NWKMYMT2Mrav0Iq2"
+		if expectURL != url {
+			t.Errorf("Request url does not match expected: %s", url)
+		}
+
+		return nil, nil
+	}
+
+	a := NewClient("https://example.com", "")
+
+	err := a.DeleteAPIKey("NWKMYMT2Mrav0Iq2")
+	if err != nil {
+		t.Errorf("Error: %s", err.Error())
+	}
+}

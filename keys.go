@@ -71,3 +71,10 @@ func (c *ClientCredentials) NewAPIKey(description string) (key *APIKey, secret s
 
 	return &wrapper.APIKey, wrapper.Meta.SecretToken, nil
 }
+
+
+// DeleteAPIKey deletes an existing API Key based on it's ID
+func (c *ClientCredentials) DeleteAPIKey(id string) (err error) {
+	_, err = c.query("account/api-keys/" + id, "DELETE", nil)
+	return
+}
