@@ -3,21 +3,24 @@ package fossil
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 //***** Structures *****//
 
 // Database contains all the information of a specific Pterodactyl database
 type Database struct {
-	ID        int       `json:"id"`
-	Server    int       `json:"server"`
-	Host      int       `json:"host"`
-	Database  string    `json:"database"`
-	Username  string    `json:"username"`
-	Remote    string    `json:"remote"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID              string `json:"id"`
+	Host            *Host  `json:"host"`
+	Name            string `json:"name"`
+	Username        string `json:"username"`
+	ConnectionsFrom string `json:"connections_from"`
+	MaxConnections  int    `json:"max_connections"`
+}
+
+// Host holds the database's host information
+type Host struct {
+	Address string `json:"address"`
+	Port    int    `json:"port"`
 }
 
 //***** Requests *****//
@@ -75,9 +78,7 @@ func (c *ApplicationCredentials) CreateDatabase(sid int, db *Database) (err erro
 	}
 
 	dbStruct := databaseCreate{
-		Database: db.Database,
-		Remote:   db.Remote,
-		Host:     db.Host,
+		// #TODO
 	}
 
 	bytes, err := json.Marshal(dbStruct)

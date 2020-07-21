@@ -3,7 +3,6 @@ package fossil
 import (
 	"github.com/google/go-cmp/cmp"
 	"testing"
-	"time"
 )
 
 func TestApplicationCredentials_GetDatabases(t *testing.T) {
@@ -45,32 +44,28 @@ func TestApplicationCredentials_GetDatabases(t *testing.T) {
 
 	a := NewApplication("", "")
 
-	u1, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:26+02:00")
-	c1, _ := time.Parse(time.RFC3339, "2019-10-06T15:16:26+02:00")
+	// u1, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:26+02:00")
+	// c1, _ := time.Parse(time.RFC3339, "2019-10-06T15:16:26+02:00")
 
-	u2, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:57+02:00")
-	c2, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:57+02:00")
+	// u2, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:57+02:00")
+	// c2, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:57+02:00")
 
 	expect := []*Database{
 		{
-			ID:        6,
-			Server:    1,
-			Host:      2,
-			Database:  "s1_test",
-			Username:  "u1_iff9TGoHFt",
-			Remote:    "%",
-			CreatedAt: c1,
-			UpdatedAt: u1,
+			ID:              "",
+			Host:            nil,
+			Name:            "",
+			Username:        "",
+			ConnectionsFrom: "",
+			MaxConnections:  0,
 		},
 		{
-			ID:        7,
-			Server:    1,
-			Host:      2,
-			Database:  "s1_db2",
-			Username:  "u1_tZ14uEvXan",
-			Remote:    "%",
-			CreatedAt: c2,
-			UpdatedAt: u2,
+			ID:              "",
+			Host:            nil,
+			Name:            "",
+			Username:        "",
+			ConnectionsFrom: "",
+			MaxConnections:  0,
 		},
 	}
 
@@ -110,18 +105,16 @@ func TestApplicationCredentials_GetDatabase(t *testing.T) {
 
 	a := NewApplication("https://example.com", "")
 
-	u1, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:26+02:00")
-	c1, _ := time.Parse(time.RFC3339, "2019-10-06T15:16:26+02:00")
+	// u1, _ := time.Parse(time.RFC3339, "2019-10-06T15:28:26+02:00")
+	// c1, _ := time.Parse(time.RFC3339, "2019-10-06T15:16:26+02:00")
 
 	expect := &Database{
-		ID:        6,
-		Server:    1,
-		Host:      2,
-		Database:  "s1_test",
-		Username:  "u1_iff9TGoHFt",
-		Remote:    "%",
-		CreatedAt: c1,
-		UpdatedAt: u1,
+		ID:              "",
+		Host:            nil,
+		Name:            "",
+		Username:        "",
+		ConnectionsFrom: "",
+		MaxConnections:  0,
 	}
 
 	got, err := a.GetDatabase(1, 1)
@@ -151,9 +144,12 @@ func TestApplicationCredentials_CreateDatabase(t *testing.T) {
 	a := NewApplication("https://example.com", "")
 
 	db := &Database{
-		Host:     2,
-		Database: "mydb",
-		Remote:   "%",
+		ID:              "",
+		Host:            nil,
+		Name:            "",
+		Username:        "",
+		ConnectionsFrom: "",
+		MaxConnections:  0,
 	}
 
 	err := a.CreateDatabase(1, db)
